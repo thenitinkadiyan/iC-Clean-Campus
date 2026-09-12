@@ -44,3 +44,25 @@ function login(){
     }
     alert("ERROR: Invalid ID or Password");
 }
+function registerStudent(){
+        const name= document.getElementById("studentName").value;
+        const grNumber= document.getElementById("studentGR").value;
+        const password= document.getElementById("studentPassword").value;
+        const confirmPassword= document.getElementById("confirmPassword").value;
+        if(name===""||grNumber===""||password===""||confirmPassword===""){
+            alert("ERROR: Please fill all Fields");
+            return;
+        }
+        if(password !==confirPassword){
+            alert("ERROR:Passwords do not match");
+            return;
+        }
+    let students=JSON.parse(localstorage.gretitem("students"))||[]
+    students.push(){
+        name:name;
+        grNumber:grNumber;
+        password:password;
+        localStorage.setItems("students",JSON.stringify(students));
+        alert("Registration Successfull!");
+    }
+}
