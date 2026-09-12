@@ -141,3 +141,22 @@ body{
     background:#d8f0df;
     color:#267a4b;
 }
+.login-box p{
+    color:white;
+}
+.login-box p a{
+    color:#f4d58d;
+    text-decoration:none;
+}
+.welcome-box{
+    background:#ccffff;
+    width:420px;
+    max-width: 90%;
+    padding: 45px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px #b8d8e8;
+    text-align:center;
+}
+body:has(.welcome-box){
+    background:#eaf6fb;
+}
