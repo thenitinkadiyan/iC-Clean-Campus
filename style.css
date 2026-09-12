@@ -157,6 +157,8 @@ body{
     box-shadow: 0 12px 35px #c5dfe8;
     text-align:center;
     border:1px solid #d7edf5;
+    font-family:Arial, sans-serif;
+    border-top: 4px solid #5bb8d6;
 }
 body:has(.welcome-box){
     background:#eaf6fb;
@@ -201,4 +203,14 @@ body:has(.welcome-box){
     color:#24566a;
     margin-top:25px;
     margin-bottom:25px;
+}
+body:has(.dashboard){
+    display:block;
+    background:#f3faf7;
+    font-family:Arial, sans-serif;
+}
+.dashbosrd{
+    width:90%;
+    max-width:1200px;
+    margin:40px auto;
 }
