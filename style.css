@@ -106,3 +106,38 @@ body{
 .quick-action button:hover{
     transform:translateY(-3px);
 }
+.recent-section{
+    margin:40px;
+}
+.report-items{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding:20px;
+    margin-top:15px;
+    border-radius:15px;
+    box-shadow:0 5px 15px #d9e5dc;
+}
+.report-item h3{
+    margin: 0 0 5px;
+    color:#777;
+}
+.report-item p{
+    margin: 0;
+    color:#777;
+}
+.status{
+    padding:7px 14px;
+    border-radius:20px;
+    font-size:14px;
+    font-weight:bold;
+}
+.pending{
+    background:#fff3cd;
+    color:#856404
+}
+.resolved{
+    background:#d8f0df
+    color :#267a4b;
+}
