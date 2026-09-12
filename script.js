@@ -65,13 +65,14 @@ function registerStudent(){
             alert("ERROR:Passwords do not match");
             return;
         }
-    let students=JSON.parse(localstorage.gretitem("students"))||[];
+    let students=JSON.parse(localStorage.getItem("students"))||[];
     students.push({
         name:name,
         grNumber:grNumber,
         password:password
     });
-    localStorage.setItems("students",JSON.stringify(students));
+    localStorage.setItem("students",JSON.stringify(students));
     alert("Registration Successfull!");
-    }
+    
     window.location.href="login.html";
+}
