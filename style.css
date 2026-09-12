@@ -62,3 +62,25 @@ body{
 .login-box button:hover{
     background: #00a03b;
 }
+.stats{
+    display:flex;
+    gap:20px;
+    margin-top:20px;
+}
+.stat-card{
+    flex:1;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 15px #d9e5dc;
+}
+.stat-card h3{
+    font-size:28px;
+    color:#267a4b;
+    margin:0 0 8px;
+}
+.stat-card p{
+    margin:0;
+    color:#555;
+}
