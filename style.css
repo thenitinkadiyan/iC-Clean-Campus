@@ -99,7 +99,7 @@ body{
     border:none;
     border-radius:15px;
     box-shadow:0 5px 15px #d9e5dc;
-    color:#267a4b
+    color:#267a4b;
     font-size:15px;
     cursor:pointer;
 }
@@ -138,6 +138,6 @@ body{
     color:#856404
 }
 .resolved{
-    background:#d8f0df
-    color :#267a4b;
+    background:#d8f0df;
+    color:#267a4b;
 }

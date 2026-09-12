@@ -42,6 +42,14 @@ function login(){
         window.location.href = "student-dashboard.html";
         return;
     }
+    let students=JSON.parse(localStorage.getItem("students"))||[];
+    let student=students.find(function(s){
+        return s.grNumber===id && s.password===password;
+    });
+    if(student){
+        window.location.href="student-dashboard.html";
+        return;
+    }
     alert("ERROR: Invalid ID or Password");
 }
 function registerStudent(){
@@ -57,12 +65,13 @@ function registerStudent(){
             alert("ERROR:Passwords do not match");
             return;
         }
-    let students=JSON.parse(localstorage.gretitem("students"))||[]
-    students.push(){
-        name:name;
-        grNumber:grNumber;
-        password:password;
-        localStorage.setItems("students",JSON.stringify(students));
-        alert("Registration Successfull!");
+    let students=JSON.parse(localstorage.gretitem("students"))||[];
+    students.push({
+        name:name,
+        grNumber:grNumber,
+        password:password
+    });
+    localStorage.setItems("students",JSON.stringify(students));
+    alert("Registration Successfull!");
     }
-}
+    window.location.href="login.html";
