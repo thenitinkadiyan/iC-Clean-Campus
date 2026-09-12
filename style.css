@@ -374,3 +374,37 @@ body:has(.signup-box) {
     background:#267a6b;
     transform:translateY(-2px);
 }
+.impact-section {
+    margin-top: 45px;
+}
+
+.impact-section h2 {
+    color: #267a6b;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #d7e8df;
+    box-shadow: 0 5px 15px #d9e5dc;
+}
+
+.stat-card h3 {
+    color: #35a875;
+    font-size: 28px;
+    margin: 0 0 8px;
+}
+
+.stat-card p {
+    color: #666666;
+    margin: 0;
+}
