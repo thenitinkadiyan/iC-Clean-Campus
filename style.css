@@ -8,7 +8,7 @@ body{
 
 }
 .login-box{
-    background:#008e44;
+    background:#267a4b;
     width:380px;
     max-width: 90%;
     padding: 40px;
@@ -60,7 +60,7 @@ body{
 
 }
 .login-box button:hover{
-    background: #00a03b;
+    background: #1d5f3a;
 }
 .stats{
     display:flex;
@@ -182,4 +182,18 @@ body:has(.welcome-box){
 .welcome-box button:hover{
     background:#438faa;
     transform:translateY(-2px);
+}
+.welcome-box h1{
+    color:#267a4b;
+    margin-bottom:8px;
+    font-size:32px;
+}
+.welcome-box p{
+    color:#5f7d89;
+    margin:0;
+    font-size:16px;
+}
+.welcome-box h2{
+    color:#24566a;
+    margin-top:25px;
 }
