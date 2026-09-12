@@ -326,3 +326,18 @@ body:has(.signup-box) {
     text-decoration: none;
     font-weight: bold;
 }
+.dashboard{
+    width:90%;
+    max-width:1100px;
+    margin:40px auto;
+}
+.dashboard h1{
+    color:#267a4b;
+    margin-bottom:10px;
+}
+.dashboard h2{
+    color:#333333;
+}
+.dashboard >p{
+    color:#666666;
+}
