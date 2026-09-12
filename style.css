@@ -8,7 +8,7 @@ body{
 
 }
 .login-box{
-    background:#009900;
+    background:#32865a;
     width:380px;
     max-width: 90%;
     padding: 40px;
@@ -154,8 +154,9 @@ body{
     max-width: 90%;
     padding: 45px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px #b8d8e8;
+    box-shadow: 0 12px 35px #c5dfe8;
     text-align:center;
+    border:1px solid #d7edf5;
 }
 body:has(.welcome-box){
     background:#eaf6fb;
