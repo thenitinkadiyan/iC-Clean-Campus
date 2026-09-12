@@ -171,3 +171,11 @@ body:has(.welcome-box){
     font-size:16px;
     cursor:pointer;
 }
+.welcome-box button:first-of-type{
+    background:#2f8fb3;
+}
+.welcome-box button:last-of-type{
+    background:#ccffff;
+    color:#2f8fb3;
+    border:2px solid #2f8fb3;
+}
