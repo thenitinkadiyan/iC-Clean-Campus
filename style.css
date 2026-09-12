@@ -8,7 +8,7 @@ body{
 
 }
 .login-box{
-    background:#267a4b;
+    background:#006400;
     width:380px;
     max-width: 90%;
     padding: 40px;
@@ -188,7 +188,7 @@ body:has(.welcome-box){
     transform:translateY(-2px);
 }
 .welcome-box h1{
-    color:#267a4b;
+    color:#254117;
     margin-bottom:8px;
     font-size:32px;
 }
