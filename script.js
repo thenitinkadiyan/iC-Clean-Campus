@@ -61,7 +61,7 @@ function registerStudent(){
             alert("ERROR: Please fill all Fields");
             return;
         }
-        if(password !==confirPassword){
+        if(password !==confirmPassword){
             alert("ERROR:Passwords do not match");
             return;
         }
