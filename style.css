@@ -164,10 +164,10 @@ body:has(.welcome-box){
 .welcome-box button{
     width:85%;
     padding: 13px;
-    margin-top: 12px;
+    margin: 12px auto;
     border:none;
     border-radius: 12px;
-    background:#4da8c7;
+    background:#2f8fb3;
     color:white;
     font-size:16px;
     cursor:pointer;
@@ -194,7 +194,6 @@ body:has(.welcome-box){
 }
 .welcome-box p{
     color:#5f7d89;
-    margin:0;
     font-size:16px;
     margin-bottom:10px;
 }
