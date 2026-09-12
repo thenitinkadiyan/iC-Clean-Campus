@@ -162,16 +162,20 @@ body:has(.welcome-box){
     background:#eaf6fb;
 }
 .welcome-box button{
-    width:100%;
+    width:85%;
     padding: 13px;
     margin-top: 12px;
     border:none;
-    border-radius: 10px;
+    border-radius: 12px;
     background:#4da8c7;
     color:white;
     font-size:16px;
     cursor:pointer;
     transition:0.3s;
+    margin-left: auto;
+    margin-right: auto;
+    display:block;
+
 }
 .welcome-box button:first-of-type,
 .welcome-box button:last-of-type{
@@ -192,8 +196,10 @@ body:has(.welcome-box){
     color:#5f7d89;
     margin:0;
     font-size:16px;
+    margin-bottom:10px;
 }
 .welcome-box h2{
     color:#24566a;
     margin-top:25px;
+    margin-bottom:25px;
 }
