@@ -2,8 +2,8 @@ const adminID1 = "123848";
 const adminPassword1 = "nitin";
 const adminID2 = "123745";
 const adminPassword2 = "deepali";
-const adminID3 = "115044";
-const adminPassword3 = "mobashir";
+const staffID1 = "115044";
+const staffPassword1 = "mobashir";
 const studentID1 = "123781";
 const studentPassword1 = "tanisha";
 const studentID2 = "124460";
@@ -26,8 +26,8 @@ function login(){
         window.location.href = "admin-dashboard.html";
         return;
     }
-    if(id===adminID3 && password===adminPassword3){
-        window.location.href = "admin-dashboard.html";
+    if(id===staffID1 && password===staffPassword1){
+        window.location.href = "staff-dashboard.html";
         return;
     }
     if(id===studentID1 && password===studentPassword1){
@@ -237,4 +237,16 @@ function updateAdminStats() {
 }
 if(document.getElementById("totalReports")){
     updateAdminStats();
+}
+function completeCleaning() {
+
+    const photo = document.querySelector('.task-card input[type="file"]').files[0];
+
+    if (!photo) {
+        alert("Please upload after-cleaning photo");
+        return;
+    }
+
+    alert("Cleaning completed! Photo sent for AI verification.");
+
 }
