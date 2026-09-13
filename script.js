@@ -142,6 +142,7 @@ function submitReport() {
     let report = JSON.parse(localStorage.getItem("report")) || [];
 
     report.push({
+        photo:event.target.result,
         location: location,
         description: description,
         status: "Pending",
@@ -270,13 +271,19 @@ function loadStaffTask() {
         return;
     }
 
-    let report = reports[reports.length - 1];
+    // Latest report jisme student ki photo available hai
+    let report = reports.slice().reverse().find(function(r) {
+        return r.photo;
+    });
 
     const photo = document.getElementById("studentReportPhoto");
 
-    if (photo && report.photo) {
-        photo.src = report.photo;
+    if (!photo || !report) {
+        return;
     }
+
+    photo.src = report.photo;
+    photo.style.display = "block";
 }
 if(document.getElementById("studentReportPhoto")){
     loadStaffTask();
