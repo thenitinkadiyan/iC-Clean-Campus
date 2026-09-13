@@ -85,7 +85,9 @@ function initMap() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
+setTimeout(function(){
+    map.invalidateSize();
+},300);
     map.on('click', function(e) {
         setLocation(e.latlng.lat, e.latlng.lng);
     });
