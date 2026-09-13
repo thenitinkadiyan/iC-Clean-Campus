@@ -807,7 +807,7 @@ body:has(.staff-dashboard) {
 
 .assigned-by {
     font-size: 13px;
-    color: #71818a !important;
+    color: #71818a;
     margin-top: 20px;
 }
 
@@ -978,4 +978,137 @@ body:has(.complaints-page){
     text-align: center;
     border: 1px solid #cfe5dc;
     border-radius: 14px;
+}
+body:has(.status-page) {
+    display: block;
+    min-height: 100vh;
+    background: #f1f8f5;
+    font-family: Arial, sans-serif;
+}
+
+.status-page {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.status-page h1 {
+    color: #1f6f5b;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.status-page h2 {
+    color: #2f5f52;
+    margin-bottom: 8px;
+}
+
+.status-page > p {
+    color: #5f716b;
+    margin-bottom: 30px;
+}
+
+.status-card {
+    background: #ffffff;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid #cfe5dc;
+    border-radius: 14px;
+    box-shadow: 0 5px 15px #dcebe5;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status-header h3 {
+    color: #2f5f52;
+    margin: 0;
+}
+
+.status-badge {
+    padding: 7px 13px;
+    border-radius: 20px;
+    background: #e1eff8;
+    color: #286b8f;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.status-card > p {
+    color: #5f716b;
+}
+
+.progress {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 30px;
+}
+
+.progress-step {
+    width: 120px;
+    text-align: center;
+}
+
+.progress-step span {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #e5ece9;
+    color: #8a9993;
+    font-weight: bold;
+}
+
+.progress-step.active span {
+    background: #2f8068;
+    color: #ffffff;
+}
+
+.progress-step p {
+    color: #7b8984;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.progress-step.active p {
+    color: #2f8068;
+    font-weight: bold;
+}
+
+.progress-line {
+    flex: 1;
+    height: 2px;
+    background: #d9e4df;
+    margin-top: 14px;
+}
+
+.no-status {
+    background: #ffffff;
+    padding: 35px;
+    text-align: center;
+    border: 1px solid #cfe5dc;
+    border-radius: 14px;
+    box-shadow: 0 5px 15px #dcebe5;
+}
+
+.no-status h3 {
+    color: #2f5f52;
+}
+
+.no-status p {
+    color: #71847d;
+}
+
+.status-page > a {
+    display: inline-block;
+    margin-top: 5px;
+    color: #2f8068;
+    text-decoration: none;
+    font-weight: bold;
 }

@@ -364,3 +364,96 @@ function loadMyComplaints() {
 if (document.getElementById("complaintsList")) {
     loadMyComplaints();
 }
+function loadComplaintStatus() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    const statusList = document.getElementById("statusList");
+
+    if (!statusList) {
+        return;
+    }
+
+    if (reports.length === 0) {
+        statusList.innerHTML = `
+            <div class="no-status">
+                <h3>No Complaints Found</h3>
+                <p>Submit a cleanliness report to track its progress.</p>
+            </div>
+        `;
+        return;
+    }
+
+    statusList.innerHTML = "";
+
+    reports.forEach(function(report, index) {
+
+        let submitted = true;
+        let assigned = report.assignedStaff ? true : false;
+        let cleaning = report.status === "In Progress" ||
+                       report.status === "Verification Pending" ||
+                       report.status === "Resolved";
+        let verification = report.status === "Verification Pending" ||
+                           report.status === "Resolved";
+        let resolved = report.status === "Resolved";
+
+        statusList.innerHTML += `
+            <div class="status-card">
+
+                <div class="status-header">
+                    <h3>Report #${index + 1}</h3>
+                    <span class="status-badge">
+                        ${report.status}
+                    </span>
+                </div>
+
+                <p><strong>Problem:</strong> ${report.description}</p>
+
+                <p><strong>Location:</strong> ${report.location}</p>
+
+                <div class="progress">
+
+                    <div class="progress-step ${submitted ? "active" : ""}">
+                        <span>✓</span>
+                        <p>Report Submitted</p>
+                    </div>
+
+                    <div class="progress-line"></div>
+
+                    <div class="progress-step ${assigned ? "active" : ""}">
+                        <span>${assigned ? "✓" : "○"}</span>
+                        <p>Staff Assigned</p>
+                    </div>
+
+                    <div class="progress-line"></div>
+
+                    <div class="progress-step ${cleaning ? "active" : ""}">
+                        <span>${cleaning ? "✓" : "○"}</span>
+                        <p>Cleaning</p>
+                    </div>
+
+                    <div class="progress-line"></div>
+
+                    <div class="progress-step ${verification ? "active" : ""}">
+                        <span>${verification ? "✓" : "○"}</span>
+                        <p>AI Verification</p>
+                    </div>
+
+                    <div class="progress-line"></div>
+
+                    <div class="progress-step ${resolved ? "active" : ""}">
+                        <span>${resolved ? "✓" : "○"}</span>
+                        <p>Resolved</p>
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+    });
+}
+
+
+if (document.getElementById("statusList")) {
+    loadComplaintStatus();
+}
