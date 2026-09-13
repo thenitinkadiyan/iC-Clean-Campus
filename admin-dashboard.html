@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - iC Clean Campus</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="admin-dashboard">
+
+        <h1>iC Clean Campus</h1>
+        <h2>Admin Dashboard</h2>
+        <p>Manage campus cleanliness reports.</p>
+
+        <div class="admin-stats">
+
+            <div class="admin-stat-card">
+                <h3 id="totalReports">0</h3>
+                <p>Total Reports</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <h3 id="pendingReports">0</h3>
+                <p>Pending Reports</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <h3 id="resolvedReports">0</h3>
+                <p>Resolved Reports</p>
+            </div>
+
+        </div>
+
+        <div class="admin-reports">
+            <h2>Student Reports</h2>
+
+            <div id="reportsList"></div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -147,7 +147,6 @@ function submitReport() {
     });
 
     localStorage.setItem("report", JSON.stringify(report));
-    alert("Total Reports Saved:"+ report.length);
 
     alert("Report Submitted Successfully!");
 
@@ -159,4 +158,67 @@ function updateReportCount(){
 }
 if(document.getElementById("reportCount")){
     updateReportCount();
+}
+function updateResolvedCount() {
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    let resolvedReports = reports.filter(function(report) {
+        return report.status === "Resolved";
+    });
+
+    document.getElementById("resolvedCount").textContent = resolvedReports.length;
+}
+function loadAdminReports() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    let reportsList = document.getElementById("reportsList");
+
+    if (!reportsList) {
+        return;
+    }
+
+    if (reports.length === 0) {
+        reportsList.innerHTML = "<p>No reports submitted yet.</p>";
+        return;
+    }
+
+    reportsList.innerHTML = "";
+
+    reports.forEach(function(report, index) {
+
+        reportsList.innerHTML += `
+            <div class="admin-report-card">
+                <h3>Report #${index + 1}</h3>
+                <p><strong>Location:</strong> ${report.location}</p>
+                <p><strong>Description:</strong> ${report.description}</p>
+                <p><strong>Status:</strong> ${report.status}</p>
+                <p><strong>Date:</strong> ${report.date}</p>
+            </div>
+        `;
+    });
+}
+if(document.getElementById("reportsList")){
+    loadAdminReports();
+}
+function updateAdminStats() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    let total = reports.length;
+
+    let pending = reports.filter(function(report) {
+        return report.status === "Pending";
+    }).length;
+
+    let resolved = reports.filter(function(report) {
+        return report.status === "Resolved";
+    }).length;
+
+    document.getElementById("totalReports").textContent = total;
+    document.getElementById("pendingReports").textContent = pending;
+    document.getElementById("resolvedReports").textContent = resolved;
+}
+if(document.getElementById("totalReports")){
+    updateAdminStats();
 }
