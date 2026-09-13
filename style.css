@@ -1226,3 +1226,28 @@ body:has(.recycle-page) {
     text-decoration: none;
     font-weight: bold;
 }
+.waste-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.waste-option {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 15px;
+    margin: 0 !important;
+    background: #f8fbfa;
+    border: 1px solid #cfe5dc;
+    border-radius: 10px;
+    color: #2f5f52 !important;
+    font-weight: normal !important;
+    cursor: pointer;
+}
+
+.waste-option input[type="checkbox"] {
+    width: auto !important;
+    margin: 0;
+    accent-color: #2f8068;
+}

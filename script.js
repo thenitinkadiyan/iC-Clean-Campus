@@ -519,12 +519,15 @@ if (document.getElementById("statusList")) {
 }
 function submitRecycleRequest() {
 
-    const type = document.getElementById("recycleType").value;
+    const type = Array.from(
+    document.querySelectorAll('.waste-options input[type="checkbox"]:checked')).map(function(checkbox) {
+    return checkbox.value;
+});
     const photo = document.getElementById("recyclePhoto").files[0];
     const location = document.getElementById("recycleLocation").value;
     const description = document.getElementById("recycleDescription").value;
 
-    if (type === "" || !photo || location === "" || description === "") {
+    if (type.length=== 0 || !photo || location === "" || description === "") {
         alert("ERROR: Please fill all details");
         return;
     }
