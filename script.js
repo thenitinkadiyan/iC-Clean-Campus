@@ -276,24 +276,19 @@ function updateAdminStats() {
 if(document.getElementById("totalReports")){
     updateAdminStats();
 }
-function completeCleaning() {
+function completeCleaning(index) {
 
-    const photo = document.getElementById("afterPhoto").files[0];
+    const photoInput = document.getElementById("afterPhoto-" + index);
 
-    if (!photo) {
+    if (!photoInput || !photoInput.files[0]) {
         alert("Please upload after-cleaning photo");
         return;
     }
 
     let reports = JSON.parse(localStorage.getItem("report")) || [];
 
-    let index = reports.findIndex(function(report) {
-        return report.assignedStaff === "Staff 02" &&
-               report.status === "In Progress";
-    });
-
-    if (index === -1) {
-        alert("Cleaning task not found");
+    if (!reports[index]) {
+        alert("Task not found");
         return;
     }
 
@@ -302,30 +297,19 @@ function completeCleaning() {
 
     localStorage.setItem("report", JSON.stringify(reports));
 
-    document.getElementById("staffTask").innerHTML = `
-        <h3>✅ Cleaning Completed</h3>
+    alert("Cleaning completed!\n\nAI is now verifying the photo.");
 
-        <p>Cleaning photo has been submitted successfully.</p>
-
-        <p>
-            <strong>Status:</strong> Verification Pending
-        </p>
-
-        <p>
-            🤖 AI is verifying the after-cleaning photo.
-        </p>
-    `;
+    loadStaffTask();
 
     setTimeout(function() {
 
         let reports = JSON.parse(localStorage.getItem("report")) || [];
 
-        let index = reports.findIndex(function(report) {
-            return report.assignedStaff === "Staff 02" &&
-                   report.status === "Verification Pending";
-        });
+        if (!reports[index]) {
+            return;
+        }
 
-        if (index === -1) {
+        if (reports[index].status !== "Verification Pending") {
             return;
         }
 
@@ -334,17 +318,7 @@ function completeCleaning() {
 
         localStorage.setItem("report", JSON.stringify(reports));
 
-        document.getElementById("staffTask").innerHTML = `
-            <h3>✅ Cleaning Verified</h3>
-
-            <p>AI has verified the after-cleaning photo.</p>
-
-            <p>
-                <strong>Status:</strong> Resolved
-            </p>
-
-            <p>🌱 Issue successfully resolved.</p>
-        `;
+        loadStaffTask();
 
     }, 3000);
 }
@@ -364,12 +338,12 @@ function loadStaffTask() {
         return;
     }
 
-    let task = [...reports].reverse().find(function(report) {
+    let tasks = reports.filter(function(report) {
         return report.assignedStaff === "Staff 02" &&
                report.status === "In Progress";
     });
 
-    if (!task) {
+    if (tasks.length === 0) {
         taskCard.innerHTML = `
             <h3>🎉 No Cleaning Task</h3>
             <p>Abhi koi cleaning task assigned nahi hai.</p>
@@ -377,32 +351,44 @@ function loadStaffTask() {
         return;
     }
 
-    window.currentStaffTaskId = task.id;
+    taskCard.innerHTML = "";
 
-    taskCard.innerHTML = `
-        <h3>🗑️ ${task.description}</h3>
+    tasks.forEach(function(task) {
 
-        <p>
-            <strong>📍 Location:</strong><br>
-            ${task.location}
-        </p>
+        let index = reports.indexOf(task);
 
-        <p>
-            <strong>🧹 Please clean the area.</strong>
-        </p>
+        taskCard.innerHTML += `
+            <div class="staff-task-item">
 
-        <button type="button" onclick="viewTaskLocation()">
-            📍 Open Location
-        </button>
+                <h3>🗑️ ${task.description}</h3>
 
-        <label>📷 Upload After-Cleaning Photo</label>
+                <p>
+                    <strong>📍 Location:</strong><br>
+                    ${task.location}
+                </p>
 
-        <input type="file" id="afterPhoto" accept="image/*">
+                <p>
+                    <strong>🧹 Please clean the area.</strong>
+                </p>
 
-        <button type="button" onclick="completeCleaning()">
-            ✅ Kaam Complete
-        </button>
-    `;
+                <button type="button" onclick="viewTaskLocation()">
+                    📍 Open Location
+                </button>
+
+                <label>📷 Upload After-Cleaning Photo</label>
+
+                <input type="file"
+                       id="afterPhoto-${index}"
+                       accept="image/*">
+
+                <button type="button"
+                        onclick="completeCleaning(${index})">
+                    ✅ Kaam Complete
+                </button>
+
+            </div>
+        `;
+    });
 }
 if(document.getElementById("staffTask")){
     loadStaffTask();
