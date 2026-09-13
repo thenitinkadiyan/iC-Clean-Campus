@@ -186,7 +186,11 @@ function loadAdminReports() {
     reportsList.innerHTML = "";
 
     reports.forEach(function(report, index) {
-
+        let button="";
+        if(report.status==="Pending"){
+            button=`<button class="resolve-button" onclick="resolveReport(${index})"> Mark as Resolved</button> `;
+        }
+        
         reportsList.innerHTML += `
             <div class="admin-report-card">
                 <h3>Report #${index + 1}</h3>
@@ -194,6 +198,7 @@ function loadAdminReports() {
                 <p><strong>Description:</strong> ${report.description}</p>
                 <p><strong>Status:</strong> ${report.status}</p>
                 <p><strong>Date:</strong> ${report.date}</p>
+                ${button}
             </div>
         `;
     });
