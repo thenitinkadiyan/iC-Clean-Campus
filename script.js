@@ -147,6 +147,7 @@ function submitReport() {
     });
 
     localStorage.setItem("report", JSON.stringify(report));
+    alert("Total Reports Saved:"+ report.length);
 
     alert("Report Submitted Successfully!");
 
