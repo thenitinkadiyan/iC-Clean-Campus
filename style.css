@@ -963,8 +963,8 @@ body:has(.complaints-page){
 }
 
 .complaint-status.in-progress {
-    background: #e1eff8;
-    color: #286b8f;
+    background: #e8f3d6;
+    color: #6b7f1f;
 }
 
 .complaint-status.resolved {
