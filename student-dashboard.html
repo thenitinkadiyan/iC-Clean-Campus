@@ -56,22 +56,10 @@
 </div>
 <div class="recent-section">
     <h2>Recent Reports</h2>
-    <div class="report-item">
-        <div>
-            <h3>Garbage near Library</h3>
-            <p>Submmited recently</p>
-        </div>
-     <span class="status-pending">Pending</span>
-    </div>
-   <div class="report-items">
-    <div>
-        <h3>Overflowing Dustbin</h3>
-        <p>Submitted yesterday</p>
-    </div>
-    <span class="status resolved">Resolved</span>
-   </div>
+    <div id="recentReportsList"></div>
 </div>
-    </div>
+        
+  
 <script src="script.js"></script>
 <script>
     let report = JSON.parse(localStorage.getItem("report"))||[];

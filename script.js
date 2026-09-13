@@ -639,3 +639,47 @@ function acceptRecycleRequest(index) {
 if(document.getElementById("recycleRequestsList")){
     loadRecycleRequests();
 }
+function loadRecentReports() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    const recentReportsList = document.getElementById("recentReportsList");
+
+    if (!recentReportsList) {
+        return;
+    }
+
+    if (reports.length === 0) {
+        recentReportsList.innerHTML = `
+            <div class="report-item">
+                <p>No reports submitted yet.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Only the latest report
+    let latestReport = reports[reports.length - 1];
+
+    let statusClass = latestReport.status
+        .toLowerCase()
+        .replace(" ", "-");
+
+    recentReportsList.innerHTML = `
+        <div class="report-item">
+
+            <div>
+                <h3>${latestReport.description}</h3>
+                <p>${latestReport.date}</p>
+            </div>
+
+            <span class="status ${statusClass}">
+                ${latestReport.status}
+            </span>
+
+        </div>
+    `;
+}
+if(document.getElementById("recentReportsList")){
+    loadRecentReports();
+}
