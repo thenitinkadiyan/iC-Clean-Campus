@@ -305,6 +305,35 @@ function completeCleaning() {
         </p>
     `;
 }
+setTimeout(function() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    if (reports.length === 0) {
+        return;
+    }
+
+    let index = reports.length - 1;
+
+    // AI verification successful
+    reports[index].status = "Resolved";
+    reports[index].aiVerified = true;
+
+    localStorage.setItem("report", JSON.stringify(reports));
+
+    document.querySelector(".task-card").innerHTML = `
+        <h3>✅ Cleaning Verified</h3>
+
+        <p>AI has verified the after-cleaning photo.</p>
+
+        <p>
+            <strong>Status:</strong> Resolved
+        </p>
+
+        <p>🌱 Issue successfully resolved.</p>
+    `;
+
+}, 3000);
 function viewTaskLocation(){
     window.open(
         "https://www.google.com/maps/search/?api=1&query=CGC+University+Mohali+Jhanjeri",
