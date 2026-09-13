@@ -251,3 +251,8 @@ function completeCleaning() {
     <p><strong>Status:</strong> Verification Pending</p>`;
 
 }
+function viewTaskLocation(){
+    window.open(
+        "https://www.google.com/maps/searc/?api=1&query=Block+3+CGC+University+Mohali","_blank"
+    );
+}
