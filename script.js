@@ -152,3 +152,10 @@ function submitReport() {
 
     window.location.href = "student-dashboard.html";
 }
+function updateReportCount(){
+    let reports= JSON.parse(localStorage.getItem("reports"))||[];
+    document.getElementById("reportsCount").textContent=reports.Length;
+}
+if(document.getElementById("reportsCount")){
+    updateReportsCount();
+}
