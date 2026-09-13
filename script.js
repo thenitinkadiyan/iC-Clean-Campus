@@ -246,7 +246,8 @@ function completeCleaning() {
         alert("Please upload after-cleaning photo");
         return;
     }
-
-    alert("Cleaning completed! Photo sent for AI verification.");
+    document.querySelector('.task-card').innerHTML=`<h3>Cleaning Completed</h3>
+    <p>Your after cleaning photo has been sent for verification</p>
+    <p><strong>Status:</strong> Verification Pending</p>`;
 
 }
