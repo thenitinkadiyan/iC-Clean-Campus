@@ -408,3 +408,31 @@ body:has(.signup-box) {
     color: #666666;
     margin: 0;
 }
+.quick-section {
+    margin-top: 45px;
+}
+.quick-section h2 {
+    color: #267a6b;
+    margin-bottom: 20px;
+}
+.quick-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.quick-actions button {
+    flex: 1;
+    min-width: 200px;
+    background: #ffffff;
+    color: #267a6b;
+    border: 1px solid #cfe4da;
+    border-radius: 12px;
+    font-size: 15px;
+    padding: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.quick-actions button:hover {
+    background: #eaf7f1;
+    transform: translateY(-2px);
+}
