@@ -389,8 +389,8 @@ function loadComplaintStatus() {
     reports.forEach(function(report, index) {
 
         let submitted = true;
-        let assigned = report.assignedStaff ? true : false;
-        let cleaning = report.status === "In Progress" ||
+        let assigned = report.assignedStaff||
+                       report.status === "In Progress" ||
                        report.status === "Verification Pending" ||
                        report.status === "Resolved";
         let verification = report.status === "Verification Pending" ||

@@ -959,7 +959,7 @@ body:has(.complaints-page){
 
 .complaint-status.pending {
     background: #fff0d6;
-    color: #a66a00;
+    color: #b77900;
 }
 
 .complaint-status.in-progress {
