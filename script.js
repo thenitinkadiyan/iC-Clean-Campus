@@ -274,7 +274,6 @@ function completeCleaning() {
         return;
     }
 
-    // Reports localStorage se lena
     let reports = JSON.parse(localStorage.getItem("report")) || [];
 
     if (reports.length === 0) {
@@ -282,17 +281,14 @@ function completeCleaning() {
         return;
     }
 
-    // Latest report ko update karna
     let index = reports.length - 1;
 
     reports[index].assignedStaff = "Staff 02";
     reports[index].cleaningCompleted = true;
     reports[index].status = "Verification Pending";
 
-    // Updated report save karna
     localStorage.setItem("report", JSON.stringify(reports));
 
-    // Staff task ko completed dikhana
     document.querySelector(".task-card").innerHTML = `
         <h3>✅ Cleaning Completed</h3>
 
@@ -349,7 +345,6 @@ function loadStaffTask() {
         return;
     }
 
-    // Latest report jisme student ki photo available hai
     let report = reports.slice().reverse().find(function(r) {
         return r.photo;
     });
@@ -514,7 +509,7 @@ function loadComplaintStatus() {
 }
 
 
-if (document.getElementById("statusList")) {
+if(document.getElementById("statusList")) {
     loadComplaintStatus();
 }
 function submitRecycleRequest() {
