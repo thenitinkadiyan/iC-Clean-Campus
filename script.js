@@ -270,10 +270,40 @@ function completeCleaning() {
         alert("Please upload after-cleaning photo");
         return;
     }
-    document.querySelector('.task-card').innerHTML=`<h3>Kaam Complete</h3>
-    <p>Apka Cleaning Photo submit ho gya hai</p>
-    <p><strong>Status:</strong> Verification Pending</p>`;
 
+    // Reports localStorage se lena
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    if (reports.length === 0) {
+        alert("No report found");
+        return;
+    }
+
+    // Latest report ko update karna
+    let index = reports.length - 1;
+
+    reports[index].assignedStaff = "Staff 02";
+    reports[index].cleaningCompleted = true;
+    reports[index].status = "Verification Pending";
+
+    // Updated report save karna
+    localStorage.setItem("report", JSON.stringify(reports));
+
+    // Staff task ko completed dikhana
+    document.querySelector(".task-card").innerHTML = `
+        <h3>✅ Cleaning Completed</h3>
+
+        <p>Cleaning photo has been submitted successfully.</p>
+
+        <p>
+            <strong>Status:</strong>
+            Verification Pending
+        </p>
+
+        <p>
+            🤖 AI is verifying the after-cleaning photo.
+        </p>
+    `;
 }
 function viewTaskLocation(){
     window.open(
