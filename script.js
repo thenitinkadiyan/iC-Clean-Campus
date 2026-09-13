@@ -560,3 +560,81 @@ function updateRecycleRequestCount() {
 if(document.getElementById("acceptedRecycleRequests")){
     updateRecycleRequestCount();
 }
+function loadRecycleRequests() {
+
+    let requests = JSON.parse(localStorage.getItem("recycleRequests")) || [];
+
+    const requestsList = document.getElementById("recycleRequestsList");
+
+    if (!requestsList) {
+        return;
+    }
+
+    if (requests.length === 0) {
+        requestsList.innerHTML = "<p>No recycle requests yet.</p>";
+        return;
+    }
+
+    requestsList.innerHTML = "";
+
+    requests.forEach(function(request, index) {
+
+        requestsList.innerHTML += `
+            <div class="admin-report-card">
+
+                <div class="admin-report-top">
+                    <h3>Recycle Request #${index + 1}</h3>
+
+                    <span class="report-status ${request.status.toLowerCase()}">
+                        ${request.status}
+                    </span>
+                </div>
+
+                <p>
+                    <strong>♻️ Waste Type:</strong>
+                    ${request.type}
+                </p>
+
+                <p>
+                    <strong>📍 Location:</strong>
+                    ${request.location}
+                </p>
+
+                <p>
+                    <strong>📝 Description:</strong>
+                    ${request.description}
+                </p>
+
+                <p>
+                    <strong>🕐 Requested:</strong>
+                    ${request.date}
+                </p>
+
+                ${
+                    request.status === "Pending"
+                    ? `<button onclick="acceptRecycleRequest(${index})">
+                        ✅ Accept Request
+                       </button>`
+                    : ""
+                }
+
+            </div>
+        `;
+    });
+}
+function acceptRecycleRequest(index) {
+
+    let requests = JSON.parse(localStorage.getItem("recycleRequests")) || [];
+
+    requests[index].status = "Accepted";
+
+    localStorage.setItem("recycleRequests", JSON.stringify(requests));
+
+    alert("Recycle Request Accepted!");
+
+    loadRecycleRequests();
+    updateRecycleRequestCount();
+}
+if(document.getElementById("recycleRequestsList")){
+    loadRecycleRequests();
+}
