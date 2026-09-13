@@ -414,8 +414,6 @@ function loadMyComplaints() {
         `;
     });
 }
-
-
 if (document.getElementById("complaintsList")) {
     loadMyComplaints();
 }
@@ -510,8 +508,6 @@ function loadComplaintStatus() {
         `;
     });
 }
-
-
 if(document.getElementById("statusList")) {
     loadComplaintStatus();
 }
@@ -658,7 +654,6 @@ function loadRecentReports() {
         return;
     }
 
-    // Only the latest report
     let latestReport = reports[reports.length - 1];
 
     let statusClass = latestReport.status
