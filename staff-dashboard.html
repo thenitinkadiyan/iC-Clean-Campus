@@ -6,58 +6,39 @@
     <title>Staff Panel - iC Clean Campus</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
     <div class="staff-dashboard">
-
         <h1>iC Clean Campus</h1>
         <h2>Cleaning Staff Panel</h2>
-        <p>Your assigned cleaning tasks.</p>
-
         <div class="staff-info">
-            <h3>Welcome, Staff 02</h3>
+            <h3>Hello, Staff 02 👋</h3>
             <span class="staff-status online">Online</span>
         </div>
-
         <div class="task-section">
-
-            <h2>My Assigned Tasks</h2>
-
+            <h2>Today's Cleaning Task</h2>
             <div class="task-card">
-
-                <div class="task-top">
-                    <h3>Dustbin Overflow</h3>
-                    <span class="priority high">High Priority</span>
-                </div>
-
-                <p><strong>📍 Location:</strong>Block-3 5th floor 503</p>
-
+                <h3>🗑️ Dustbin Overflow</h3>
                 <p>
-                    <strong>Issue:</strong>
-                    Dustbin is overflowing and needs immediate cleaning.
+                    <strong>📍 Location:</strong><br>
+                    Block 3, 5th Floor
                 </p>
-
-                <p class="assigned-by">
-                    Assigned automatically by AI
+                <p>
+                    <strong>🧹 Please clean the area.</strong>
                 </p>
-
                 <button type="button" onclick="viewTaskLocation()">
-                    📍 View Location
+                    📍 Open Location
                 </button>
+                <label>📷 Upload After-Cleaning Photo</label>
 
-                <label>Upload After Cleaning Photo</label>
-                <input type="file" accept="image/*">
+                <input type="file" id="afterPhoto" accept="image/*">
+
 
                 <button type="button" onclick="completeCleaning()">
-                    ✅ Cleaning Completed
+                    ✅ Kaam Complete
                 </button>
-
             </div>
-
         </div>
-
     </div>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
