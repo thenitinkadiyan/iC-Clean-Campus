@@ -350,19 +350,22 @@ body:has(.signup-box) {
     flex:1;
     background:#ffffff;
     padding:25px;
-    border-radius:15px;
+    border-radius:16px;
     border:1px solid #d7e8df;
     box-shadow:0 5px 15px #d9e5dc;
+    display:flex;
+    flex-direction:column;
 }
 .card h3{
     color:#267a4b;
     margin-top:0;
 }
 .card p{
-    color:#666666;
+    color:#60756d;
     line-height:1.5;
 }
 .card button{
+    margin-top:auto;
     background:#35a875;
     color:white;
     border:none;
