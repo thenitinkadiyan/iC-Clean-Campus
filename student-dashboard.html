@@ -74,6 +74,10 @@
 </div>
     </div>
 <script src="script.js"></script>
+<script>
+    let reports = JSON.parse(localStorage.getItem("reports"))||[];
+    document.getElementById("reportsCount").textContent=reports.length;
+</script>
 
 
 </body>
