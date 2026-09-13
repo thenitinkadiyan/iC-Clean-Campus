@@ -11,15 +11,15 @@
     <h1>Report Garbage</h1>
     <p>Help Us to keep the campus clean</p>
     <lable>Upload Photos</lable>
-    <input type="file" accept="image/*">
+    <input type="file" id="garbagePhoto" accept="image/*">
     <lable>Location</lable>
     <div id="map"></div>
     <button type="button" onclick="getCurrrentLocation()">Use My Location</button>
     <input type="text" id="locationText" placeholder="Selected Location" readonly>
     <lable>Description</lable>
-    <textarea placeholder="Describe the cleanliness issue"></textarea>
+    <textarea id="description" placeholder="Describe the cleanliness issue"></textarea>
     <button on click="submitReport()">Submit Report</button>
-    <a herf="student-dashboard.html">Back to Dashboard</a>
+    <a href="student-dashboard.html">Back to Dashboard</a>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="script.js"></script>

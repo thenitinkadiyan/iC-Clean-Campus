@@ -126,3 +126,29 @@ function getCurrentLocation() {
         }
     );
 }
+function submitReport() {
+
+    const photo = document.getElementById("garbagePhoto").files[0];
+    const location = document.getElementById("locationText").value;
+    const description = document.getElementById("description").value;
+
+    if (!photo || location === "" || description === "") {
+        alert("ERROR: Please fill all details");
+        return;
+    }
+
+    let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+    reports.push({
+        location: location,
+        description: description,
+        status: "Pending",
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("reports", JSON.stringify(reports));
+
+    alert("Report Submitted Successfully!");
+
+    window.location.href = "student-dashboard.html";
+}
