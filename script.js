@@ -262,3 +262,22 @@ function viewTaskLocation(){
         "_blank"
     );
 }
+function loadStaffTask() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    if (reports.length === 0) {
+        return;
+    }
+
+    let report = reports[reports.length - 1];
+
+    const photo = document.getElementById("studentReportPhoto");
+
+    if (photo && report.photo) {
+        photo.src = report.photo;
+    }
+}
+if(document.getElementById("studentReportPhoto")){
+    loadStaffTask();
+}

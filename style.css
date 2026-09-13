@@ -847,3 +847,19 @@ body:has(.staff-dashboard) {
     border-radius: 8px;
     background: #f8fbfc;
 }
+.before-photo {
+    margin: 20px 0;
+}
+
+.before-photo h4 {
+    color: #344f5c;
+    margin-bottom: 10px;
+}
+
+.before-photo img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #d5e5ed;
+}
