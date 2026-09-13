@@ -127,36 +127,29 @@ function getCurrentLocation() {
     );
 }
 function submitReport() {
-
     const photo = document.getElementById("garbagePhoto").files[0];
     const location = document.getElementById("locationText").value;
     const description = document.getElementById("description").value;
-
     if (!photo || location === "" || description === "") {
         alert("ERROR: Please fill all details");
         return;
     }
-    const reader=new FileReader();
-    reader.onload=function(event){
-
-    let report = JSON.parse(localStorage.getItem("report")) || [];
-
-    report.push({
-        photo:event.target.result,
-        location: location,
-        description: description,
-        status: "Pending",
-        assignedStaff:"Staff 02",
-        date: new Date().toLocaleString()
-    });
-
-    localStorage.setItem("report", JSON.stringify(report));
-
-    alert("Report Submitted Successfully!");
-
-    window.location.href = "student-dashboard.html";
-};
-reader.readAsDataURL(photo);
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        let reports = JSON.parse(localStorage.getItem("report")) || [];
+        reports.push({
+            photo: event.target.result,
+            location: location,
+            description: description,
+            status: "In Progress",
+            assignedStaff: "Staff 02",
+            date: new Date().toLocaleString()
+        });
+        localStorage.setItem("report", JSON.stringify(reports));
+        alert("Report Submitted Successfully!\n\nStaff 02 has been assigned automatically.");
+        window.location.href = "student-dashboard.html";
+    };
+    reader.readAsDataURL(photo);
 }
 function updateReportCount(){
     let report= JSON.parse(localStorage.getItem("report"))||[];
@@ -167,7 +160,6 @@ if(document.getElementById("reportCount")){
 }
 function updateResolvedCount() {
     let reports = JSON.parse(localStorage.getItem("report")) || [];
-
     let resolvedReports = reports.filter(function(report) {
         return report.status === "Resolved";
     });
