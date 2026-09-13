@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel "stylesheet" herf="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    </head>
+    <body>
+<div class="report-box">
+    <h1>Report Garbage</h1>
+    <p>Help Us to keep the campus clean</p>
+    <lable>Upload Photos</lable>
+    <input type="file" accept="image/*">
+    <lable>Location</lable>
+    <div id="map"></div>
+    <button type="button" onclick="getCurrrentLocation()">Use My Location</button>
+    <input type="text" id="locationText" placeholder="Selected Location" readonly>
+    <lable>Description</lable>
+    <textarea placeholder="Describe the cleanliness issue"></textarea>
+    <button on click="submitReport()">Submit Report</button>
+    <a herf="student-dashboard.html">Back to Dashboard</a>
+</div>
+<script src="script.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+<script>initMap();</script>
+    </body>
+</html>

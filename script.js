@@ -76,3 +76,51 @@ function registerStudent(){
     
     window.location.href="login.html";
 }
+let map;
+let marker;
+
+function initMap() {
+    map = L.map('map').setView([30.7046, 76.7179], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    map.on('click', function(e) {
+        setLocation(e.latlng.lat, e.latlng.lng);
+    });
+}
+
+function setLocation(lat, lng) {
+
+    if (marker) {
+        map.removeLayer(marker);
+    }
+
+    marker = L.marker([lat, lng]).addTo(map);
+
+    document.getElementById("locationText").value =
+        lat.toFixed(6) + ", " + lng.toFixed(6);
+}
+
+function getCurrentLocation() {
+
+    if (!navigator.geolocation) {
+        alert("Location is not supported by this browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            map.setView([lat, lng], 17);
+            setLocation(lat, lng);
+        },
+        function() {
+            alert("Unable to get your current location.");
+        }
+    );
+}
