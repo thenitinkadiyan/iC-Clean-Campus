@@ -314,8 +314,6 @@ setTimeout(function() {
     }
 
     let index = reports.length - 1;
-
-    // AI verification successful
     reports[index].status = "Resolved";
     reports[index].aiVerified = true;
 
