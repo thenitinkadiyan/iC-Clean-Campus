@@ -448,6 +448,9 @@ function loadComplaintStatus() {
                        report.status === "In Progress" ||
                        report.status === "Verification Pending" ||
                        report.status === "Resolved";
+        let cleaning = report.status === "In Progress"||
+                       report.status === "Verification Pending"||
+                       report.status === "Resolved";
         let verification = report.status === "Verification Pending" ||
                            report.status === "Resolved";
         let resolved = report.status === "Resolved";
