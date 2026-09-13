@@ -306,3 +306,61 @@ function loadStaffTask() {
 if(document.getElementById("studentReportPhoto")){
     loadStaffTask();
 }
+function loadMyComplaints() {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    const complaintsList = document.getElementById("complaintsList");
+
+    if (!complaintsList) {
+        return;
+    }
+
+    if (reports.length === 0) {
+        complaintsList.innerHTML = `
+            <div class="no-complaints">
+                <h3>No Complaints Yet</h3>
+                <p>You have not submitted any cleanliness report.</p>
+            </div>
+        `;
+        return;
+    }
+
+    complaintsList.innerHTML = "";
+
+    reports.forEach(function(report, index) {
+
+        complaintsList.innerHTML += `
+            <div class="complaint-card">
+
+                <div class="complaint-top">
+                    <h3>Report #${index + 1}</h3>
+                    <span class="complaint-status ${report.status.toLowerCase().replace(" ", "-")}">
+                        ${report.status}
+                    </span>
+                </div>
+
+                <p>
+                    <strong>📍 Location:</strong>
+                    ${report.location}
+                </p>
+
+                <p>
+                    <strong>📝 Problem:</strong>
+                    ${report.description}
+                </p>
+
+                <p>
+                    <strong>🕐 Submitted:</strong>
+                    ${report.date}
+                </p>
+
+            </div>
+        `;
+    });
+}
+
+
+if (document.getElementById("complaintsList")) {
+    loadMyComplaints();
+}
