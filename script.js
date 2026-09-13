@@ -344,8 +344,10 @@ function completeCleaning() {
 
             <p>🌱 Issue successfully resolved.</p>
         `;
-
+        loadStaffTask();
     }, 3000);
+    
+
 }
 function viewTaskLocation(){
     window.open(
@@ -363,7 +365,6 @@ function loadStaffTask() {
         return;
     }
 
-    // Latest task assigned to Staff 02
     let task = [...reports].reverse().find(function(report) {
         return report.assignedStaff === "Staff 02" &&
                report.status === "In Progress";
@@ -377,7 +378,6 @@ function loadStaffTask() {
         return;
     }
 
-    // Remember which exact task is being shown
     window.currentStaffTaskId = task.id;
 
     taskCard.innerHTML = `
