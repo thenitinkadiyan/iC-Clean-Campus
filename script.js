@@ -304,7 +304,6 @@ function completeCleaning() {
             🤖 AI is verifying the after-cleaning photo.
         </p>
     `;
-}
 setTimeout(function() {
 
     let reports = JSON.parse(localStorage.getItem("report")) || [];
@@ -332,6 +331,7 @@ setTimeout(function() {
     `;
 
 }, 3000);
+}
 function viewTaskLocation(){
     window.open(
         "https://www.google.com/maps/search/?api=1&query=CGC+University+Mohali+Jhanjeri",
