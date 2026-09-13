@@ -897,6 +897,12 @@ body:has(.staff-dashboard) {
     background: #e4f5e9;
     color: #267a4b;
 }
+body:has(.complaints-page){
+    display:block;
+    min-height:100vh;
+    background:#f1f8f5;
+    font-family:Arial,sans-serif;
+}
 .complaints-page {
     width: 90%;
     max-width: 900px;
@@ -904,17 +910,17 @@ body:has(.staff-dashboard) {
 }
 
 .complaints-page h1 {
-    color: #286b5a;
+    color: #1f6f5b;
     margin-bottom: 8px;
 }
 
 .complaints-page h2 {
-    color: #355c50;
+    color: #2f5f52;
     margin-bottom: 8px;
 }
 
 .complaints-page > p {
-    color: #71847d;
+    color: #5f716b;
     margin-bottom: 30px;
 }
 
