@@ -127,17 +127,24 @@ function getCurrentLocation() {
     );
 }
 function submitReport() {
+
     const photo = document.getElementById("garbagePhoto").files[0];
     const location = document.getElementById("locationText").value;
     const description = document.getElementById("description").value;
+
     if (!photo || location === "" || description === "") {
         alert("ERROR: Please fill all details");
         return;
     }
+
     const reader = new FileReader();
+
     reader.onload = function(event) {
+
         let reports = JSON.parse(localStorage.getItem("report")) || [];
+
         reports.push({
+            id: Date.now(),
             photo: event.target.result,
             location: location,
             description: description,
@@ -145,10 +152,14 @@ function submitReport() {
             assignedStaff: "Staff 02",
             date: new Date().toLocaleString()
         });
+
         localStorage.setItem("report", JSON.stringify(reports));
+
         alert("Report Submitted Successfully!\n\nStaff 02 has been assigned automatically.");
+
         window.location.href = "student-dashboard.html";
     };
+
     reader.readAsDataURL(photo);
 }
 function updateReportCount(){
@@ -265,9 +276,9 @@ function updateAdminStats() {
 if(document.getElementById("totalReports")){
     updateAdminStats();
 }
-function completeCleaning(index) {
+function completeCleaning() {
 
-    const photo = document.getElementById("afterPhoto" + index).files[0];
+    const photo = document.getElementById("afterPhoto").files[0];
 
     if (!photo) {
         alert("Please upload after-cleaning photo");
@@ -276,8 +287,12 @@ function completeCleaning(index) {
 
     let reports = JSON.parse(localStorage.getItem("report")) || [];
 
-    if (!reports[index]) {
-        alert("Report not found");
+    let index = reports.findIndex(function(report) {
+        return report.id === window.currentStaffTaskId;
+    });
+
+    if (index === -1) {
+        alert("Task not found");
         return;
     }
 
@@ -286,13 +301,30 @@ function completeCleaning(index) {
 
     localStorage.setItem("report", JSON.stringify(reports));
 
-    loadStaffTask();
+    document.getElementById("staffTask").innerHTML = `
+        <h3>✅ Cleaning Completed</h3>
+
+        <p>Cleaning photo has been submitted successfully.</p>
+
+        <p>
+            <strong>Status:</strong>
+            Verification Pending
+        </p>
+
+        <p>
+            🤖 AI is verifying the after-cleaning photo.
+        </p>
+    `;
 
     setTimeout(function() {
 
         let reports = JSON.parse(localStorage.getItem("report")) || [];
 
-        if (!reports[index]) {
+        let index = reports.findIndex(function(report) {
+            return report.id === window.currentStaffTaskId;
+        });
+
+        if (index === -1) {
             return;
         }
 
@@ -301,7 +333,17 @@ function completeCleaning(index) {
 
         localStorage.setItem("report", JSON.stringify(reports));
 
-        loadStaffTask();
+        document.getElementById("staffTask").innerHTML = `
+            <h3>✅ Cleaning Verified</h3>
+
+            <p>AI has verified the after-cleaning photo.</p>
+
+            <p>
+                <strong>Status:</strong> Resolved
+            </p>
+
+            <p>🌱 Issue successfully resolved.</p>
+        `;
 
     }, 3000);
 }
@@ -321,62 +363,47 @@ function loadStaffTask() {
         return;
     }
 
-    let tasks = reports.filter(function(report) {
+    // Latest task assigned to Staff 02
+    let task = [...reports].reverse().find(function(report) {
         return report.assignedStaff === "Staff 02" &&
                report.status === "In Progress";
     });
 
-    if (tasks.length === 0) {
+    if (!task) {
         taskCard.innerHTML = `
-            <div class="no-task">
-                <h3>🎉 No Cleaning Task</h3>
-                <p>Abhi koi cleaning task assigned nahi hai.</p>
-            </div>
+            <h3>🎉 No Cleaning Task</h3>
+            <p>Abhi koi cleaning task assigned nahi hai.</p>
         `;
         return;
     }
 
-    taskCard.innerHTML = "";
+    // Remember which exact task is being shown
+    window.currentStaffTaskId = task.id;
 
-    tasks.forEach(function(task) {
+    taskCard.innerHTML = `
+        <h3>🗑️ ${task.description}</h3>
 
-        let index = reports.indexOf(task);
+        <p>
+            <strong>📍 Location:</strong><br>
+            ${task.location}
+        </p>
 
-        taskCard.innerHTML += `
-            <div class="staff-task-item">
+        <p>
+            <strong>🧹 Please clean the area.</strong>
+        </p>
 
-                <div class="task-top">
-                    <h3>🗑️ ${task.description}</h3>
-                    <span class="priority high">Cleaning Task</span>
-                </div>
+        <button type="button" onclick="viewTaskLocation()">
+            📍 Open Location
+        </button>
 
-                <p>
-                    <strong>📍 Location:</strong><br>
-                    ${task.location}
-                </p>
+        <label>📷 Upload After-Cleaning Photo</label>
 
-                <p>
-                    <strong>🧹 Please clean the area.</strong>
-                </p>
+        <input type="file" id="afterPhoto" accept="image/*">
 
-                <button type="button" onclick="viewTaskLocation()">
-                    📍 Open Location
-                </button>
-
-                <label>📷 Upload After-Cleaning Photo</label>
-
-                <input type="file"
-                       id="afterPhoto${index}"
-                       accept="image/*">
-
-                <button type="button"
-                        onclick="completeCleaning(${index})">
-                    ✅ Kaam Complete
-                </button>
-
-            </div>
-        `;
-    });
+        <button type="button" onclick="completeCleaning()">
+            ✅ Kaam Complete
+        </button>
+    `;
 }
 if(document.getElementById("staffTask")){
     loadStaffTask();
