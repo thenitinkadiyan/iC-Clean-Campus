@@ -166,6 +166,9 @@ function updateResolvedCount() {
 
     document.getElementById("resolvedCount").textContent = resolvedReports.length;
 }
+if(document.getElementById("resolvedCount")){
+    updateResolvedCount();
+}
 function loadAdminReports() {
 
     let reports = JSON.parse(localStorage.getItem("report")) || [];
