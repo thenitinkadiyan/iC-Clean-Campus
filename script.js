@@ -136,6 +136,8 @@ function submitReport() {
         alert("ERROR: Please fill all details");
         return;
     }
+    const reader=new FileReader();
+    reader.onload=function(event){
 
     let report = JSON.parse(localStorage.getItem("report")) || [];
 
@@ -143,6 +145,7 @@ function submitReport() {
         location: location,
         description: description,
         status: "Pending",
+        assignedStaff:"Staff 02",
         date: new Date().toLocaleString()
     });
 
@@ -151,6 +154,8 @@ function submitReport() {
     alert("Report Submitted Successfully!");
 
     window.location.href = "student-dashboard.html";
+};
+reader.readAsDataURL(photo);
 }
 function updateReportCount(){
     let report= JSON.parse(localStorage.getItem("report"))||[];
