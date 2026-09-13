@@ -240,14 +240,14 @@ if(document.getElementById("totalReports")){
 }
 function completeCleaning() {
 
-    const photo = document.querySelector('.task-card input[type="file"]').files[0];
+    const photo = document.getElementById("afterPhoto").files[0];
 
     if (!photo) {
         alert("Please upload after-cleaning photo");
         return;
     }
-    document.querySelector('.task-card').innerHTML=`<h3>Cleaning Completed</h3>
-    <p>Your after cleaning photo has been sent for verification</p>
+    document.querySelector('.task-card').innerHTML=`<h3>Kaam Complete</h3>
+    <p>Apka Cleaning Photo submit ho gya hai</p>
     <p><strong>Status:</strong> Verification Pending</p>`;
 
 }
