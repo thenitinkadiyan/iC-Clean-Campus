@@ -614,23 +614,93 @@ body:has(.admin-dashboard) {
 .admin-stat-card h3 {
     margin: 0 0 8px;
     color: #d95c5c;
-    font-size: 32px;
+    font-size: 30px;
 }
 
 .admin-stat-card p {
     margin: 0;
     color: #806666;
 }
+.admin-section{
+    margin-top:"40px";
+}
+.admin-section h2,
 .admin-reports h2 {
     color: #a83f3f;
     margin-bottom: 20px;
+}
+
+.staff-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.staff-card {
+    background: #ffffff;
+    padding: 18px 22px;
+    border: 1px solid #f0cccc;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.staff-card h3 {
+    color: #5c3d3d;
+    margin: 0 0 5px;
+}
+
+.staff-card p {
+    color: #806666;
+    margin: 0;
+    font-size: 14px;
+}
+
+.staff-status {
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.staff-status.online {
+    background: #e4f5e9;
+    color: #267a4b;
+}
+
+.staff-status.offline {
+    background: #f9e0e0;
+    color: #a83f3f;
+}
+.reason-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.reason-card {
+    background: #ffffff;
+    padding: 17px 20px;
+    border: 1px solid #f0cccc;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    color: #665454;
+}
+
+.reason-card strong {
+    color: #d95c5c;
+}
+.admin-reports {
+    margin-top: 45px;
 }
 
 .admin-report-card {
     background: #ffffff;
     padding: 22px 25px;
     margin-bottom: 15px;
-    border-radius: 15px;
+    border-radius: 14px;
     border: 1px solid #f0cccc;
     box-shadow: 0 5px 15px #f0d6d6;
 }

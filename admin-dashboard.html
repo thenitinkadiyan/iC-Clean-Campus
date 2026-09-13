@@ -13,8 +13,9 @@
 
         <h1>iC Clean Campus</h1>
         <h2>Admin Dashboard</h2>
-        <p>Manage campus cleanliness reports.</p>
+        <p>Monitor campus cleanliness and staff activity.</p>
 
+        <!-- Report Statistics -->
         <div class="admin-stats">
 
             <div class="admin-stat-card">
@@ -34,10 +35,90 @@
 
         </div>
 
+
+        <!-- Staff Status -->
+        <div class="admin-section">
+
+            <h2>Today's Staff</h2>
+
+            <div class="staff-list">
+
+                <div class="staff-card">
+                    <div>
+                        <h3>Staff 01</h3>
+                        <p>Cleaning Staff</p>
+                    </div>
+                    <span class="staff-status online">Online</span>
+                </div>
+
+                <div class="staff-card">
+                    <div>
+                        <h3>Staff 02</h3>
+                        <p>Cleaning Staff</p>
+                    </div>
+                    <span class="staff-status online">Online</span>
+                </div>
+
+                <div class="staff-card">
+                    <div>
+                        <h3>Staff 03</h3>
+                        <p>Cleaning Staff</p>
+                    </div>
+                    <span class="staff-status offline">Offline</span>
+                </div>
+
+                <div class="staff-card">
+                    <div>
+                        <h3>Staff 04</h3>
+                        <p>Cleaning Staff</p>
+                    </div>
+                    <span class="staff-status online">Online</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pending Reasons -->
+        <div class="admin-section">
+
+            <h2>Pending Report Reasons</h2>
+
+            <div class="reason-list">
+
+                <div class="reason-card">
+                    <span>Staff unavailable</span>
+                    <strong>2</strong>
+                </div>
+
+                <div class="reason-card">
+                    <span>Cleaning not completed</span>
+                    <strong>3</strong>
+                </div>
+
+                <div class="reason-card">
+                    <span>Verification failed</span>
+                    <strong>1</strong>
+                </div>
+
+                <div class="reason-card">
+                    <span>High workload</span>
+                    <strong>2</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Student Reports -->
         <div class="admin-reports">
+
             <h2>Student Reports</h2>
 
             <div id="reportsList"></div>
+
         </div>
 
     </div>
