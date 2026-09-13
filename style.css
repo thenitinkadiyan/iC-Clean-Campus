@@ -910,17 +910,17 @@ body:has(.complaints-page){
 }
 
 .complaints-page h1 {
-    color: #1f6f5b;
+    color: #07441e;
     margin-bottom: 8px;
 }
 
 .complaints-page h2 {
-    color: #2f5f52;
+    color: #0c4b2d;
     margin-bottom: 8px;
 }
 
 .complaints-page > p {
-    color: #5f716b;
+    color: #34574b;
     margin-bottom: 30px;
 }
 
