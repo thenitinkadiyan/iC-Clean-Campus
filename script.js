@@ -203,6 +203,17 @@ function loadAdminReports() {
         `;
     });
 }
+function resolveReport(index) {
+
+    let reports = JSON.parse(localStorage.getItem("report")) || [];
+
+    reports[index].status = "Resolved";
+
+    localStorage.setItem("report", JSON.stringify(reports));
+
+    loadAdminReports();
+    updateAdminStats();
+}
 if(document.getElementById("reportsList")){
     loadAdminReports();
 }
