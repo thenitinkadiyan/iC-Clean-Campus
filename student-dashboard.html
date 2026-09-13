@@ -33,7 +33,7 @@
     <h2>Your Campos Impact</h2>
     <div class="stats">
         <div class="stat-card">
-            <h3 id="reportsCount">0</h3>
+            <h3 id="reportCount">0</h3>
             <p>Reports Submitted</p>
         </div>
         <div class="stat-card">
@@ -75,8 +75,8 @@
     </div>
 <script src="script.js"></script>
 <script>
-    let reports = JSON.parse(localStorage.getItem("reports"))||[];
-    document.getElementById("reportsCount").textContent=reports.length;
+    let report = JSON.parse(localStorage.getItem("report"))||[];
+    document.getElementById("reportCount").textContent=report.length;
 </script>
 
 

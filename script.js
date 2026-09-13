@@ -137,25 +137,25 @@ function submitReport() {
         return;
     }
 
-    let reports = JSON.parse(localStorage.getItem("reports")) || [];
+    let report = JSON.parse(localStorage.getItem("report")) || [];
 
-    reports.push({
+    report.push({
         location: location,
         description: description,
         status: "Pending",
         date: new Date().toLocaleString()
     });
 
-    localStorage.setItem("reports", JSON.stringify(reports));
+    localStorage.setItem("report", JSON.stringify(report));
 
     alert("Report Submitted Successfully!");
 
     window.location.href = "student-dashboard.html";
 }
 function updateReportCount(){
-    let reports= JSON.parse(localStorage.getItem("reports"))||[];
-    document.getElementById("reportsCount").textContent=reports.Length;
+    let report= JSON.parse(localStorage.getItem("report"))||[];
+    document.getElementById("reportCount").textContent=report.Length;
 }
-if(document.getElementById("reportsCount")){
-    updateReportsCount();
+if(document.getElementById("reportCount")){
+    updateReportCount();
 }
