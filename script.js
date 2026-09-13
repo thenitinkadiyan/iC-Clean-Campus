@@ -253,6 +253,7 @@ function completeCleaning() {
 }
 function viewTaskLocation(){
     window.open(
-        "https://www.google.com/maps/searc/?api=1&query=Block+3+CGC+University+Mohali","_blank"
+        "https://www.google.com/maps/search/?api=1&query=Chandigarh+Engineering+College+Block+3+Wilson+Block+CGC+Landran",
+        "_blank"
     );
 }
