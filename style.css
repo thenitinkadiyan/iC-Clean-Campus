@@ -439,3 +439,45 @@ body:has(.signup-box) {
     background: #eaf7f1;
     transform: translateY(-2px);
 }
+.recent-section {
+    margin-top: 45px;
+}
+.recent-section h2 {
+    color: #267a6b;
+    margin-bottom: 20px;
+}
+.report-item {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    padding: 20px 25px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #dceee7;
+    box-shadow: 0 5px 15px #dceae5;
+}
+.report-item h3 {
+    color: #334c44;
+    margin: 0 0 8px;
+}
+.report-item p {
+    color: #708078;
+    margin: 0;
+}
+.status {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.status.pending {
+    background: #fff3cd;
+    color: #9a7200;
+}
+.status.resolved {
+    background: #dff4e9;
+    color: #267a4b;
+}
