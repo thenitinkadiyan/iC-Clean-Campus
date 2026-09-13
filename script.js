@@ -288,11 +288,12 @@ function completeCleaning() {
     let reports = JSON.parse(localStorage.getItem("report")) || [];
 
     let index = reports.findIndex(function(report) {
-        return report.id === window.currentStaffTaskId;
+        return report.assignedStaff === "Staff 02" &&
+               report.status === "In Progress";
     });
 
     if (index === -1) {
-        alert("Task not found");
+        alert("Cleaning task not found");
         return;
     }
 
@@ -307,8 +308,7 @@ function completeCleaning() {
         <p>Cleaning photo has been submitted successfully.</p>
 
         <p>
-            <strong>Status:</strong>
-            Verification Pending
+            <strong>Status:</strong> Verification Pending
         </p>
 
         <p>
@@ -321,7 +321,8 @@ function completeCleaning() {
         let reports = JSON.parse(localStorage.getItem("report")) || [];
 
         let index = reports.findIndex(function(report) {
-            return report.id === window.currentStaffTaskId;
+            return report.assignedStaff === "Staff 02" &&
+                   report.status === "Verification Pending";
         });
 
         if (index === -1) {
@@ -344,10 +345,8 @@ function completeCleaning() {
 
             <p>🌱 Issue successfully resolved.</p>
         `;
-        loadStaffTask();
-    }, 3000);
-    
 
+    }, 3000);
 }
 function viewTaskLocation(){
     window.open(
