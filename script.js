@@ -517,3 +517,46 @@ function loadComplaintStatus() {
 if (document.getElementById("statusList")) {
     loadComplaintStatus();
 }
+function submitRecycleRequest() {
+
+    const type = document.getElementById("recycleType").value;
+    const photo = document.getElementById("recyclePhoto").files[0];
+    const location = document.getElementById("recycleLocation").value;
+    const description = document.getElementById("recycleDescription").value;
+
+    if (type === "" || !photo || location === "" || description === "") {
+        alert("ERROR: Please fill all details");
+        return;
+    }
+
+    let requests = JSON.parse(localStorage.getItem("recycleRequests")) || [];
+
+    requests.push({
+        type: type,
+        photo: photo.name,
+        location: location,
+        description: description,
+        status: "Pending",
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("recycleRequests", JSON.stringify(requests));
+
+    alert("Recycle Request Submitted Successfully!");
+
+    window.location.href = "student-dashboard.html";
+}
+function updateRecycleRequestCount() {
+
+    let requests = JSON.parse(localStorage.getItem("recycleRequests")) || [];
+
+    let acceptedRequests = requests.filter(function(request) {
+        return request.status === "Accepted";
+    });
+
+    document.getElementById("acceptedRecycleRequests").textContent =
+        acceptedRequests.length;
+}
+if(document.getElementById("acceptedRecycleRequests")){
+    updateRecycleRequestCount();
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Recycle Request - iC Clean Campus</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="recycle-page">
+
+        <h1>iC Clean Campus</h1>
+        <h2>Recycle Request ♻️</h2>
+
+        <p>
+            Request collection of recyclable waste from your campus location.
+        </p>
+
+        <label>Waste Type</label>
+
+        <select id="recycleType">
+            <option value="">Select Waste Type</option>
+            <option value="Paper">📄 Paper</option>
+            <option value="Plastic">🧴 Plastic</option>
+            <option value="E-Waste">💻 E-Waste</option>
+            <option value="Metal">🔩 Metal</option>
+            <option value="Other">♻️ Other</option>
+        </select>
+
+
+        <label>Upload Photo</label>
+
+        <input type="file" id="recyclePhoto" accept="image/*">
+
+
+        <label>Pickup Location</label>
+
+        <input type="text"
+               id="recycleLocation"
+               placeholder="Enter pickup location">
+
+
+        <label>Description</label>
+
+        <textarea id="recycleDescription"
+                  placeholder="Describe the recyclable waste"></textarea>
+
+
+        <button type="button" onclick="submitRecycleRequest()">
+            ♻️ Submit Recycle Request
+        </button>
+
+
+        <a href="student-dashboard.html">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
