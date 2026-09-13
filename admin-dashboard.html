@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,9 @@
         <h2>Admin Dashboard</h2>
         <p>Monitor campus cleanliness and staff activity.</p>
 
+
         <!-- Report Statistics -->
+
         <div class="admin-stats">
 
             <div class="admin-stat-card">
@@ -25,18 +28,24 @@
 
             <div class="admin-stat-card">
                 <h3 id="pendingReports">0</h3>
-                <p>Pending Reports</p>
+                <p>Pending</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <h3 id="inProgressReports">0</h3>
+                <p>In Progress</p>
             </div>
 
             <div class="admin-stat-card">
                 <h3 id="resolvedReports">0</h3>
-                <p>Resolved Reports</p>
+                <p>Resolved</p>
             </div>
 
         </div>
 
 
         <!-- Staff Status -->
+
         <div class="admin-section">
 
             <h2>Today's Staff</h2>
@@ -81,9 +90,10 @@
 
 
         <!-- Pending Reasons -->
+
         <div class="admin-section">
 
-            <h2>Pending Report Reasons</h2>
+            <h2>Why Reports Are Pending</h2>
 
             <div class="reason-list">
 
@@ -98,7 +108,7 @@
                 </div>
 
                 <div class="reason-card">
-                    <span>Verification failed</span>
+                    <span>Verification pending</span>
                     <strong>1</strong>
                 </div>
 
@@ -113,6 +123,7 @@
 
 
         <!-- Student Reports -->
+
         <div class="admin-reports">
 
             <h2>Student Reports</h2>
@@ -123,7 +134,9 @@
 
     </div>
 
+
     <script src="script.js"></script>
 
 </body>
+
 </html>

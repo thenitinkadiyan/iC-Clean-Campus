@@ -192,19 +192,39 @@ function loadAdminReports() {
     reportsList.innerHTML = "";
 
     reports.forEach(function(report, index) {
-        let button="";
-        if(report.status==="Pending"){
-            button=`<button class="resolve-button" onclick="resolveReport(${index})"> Mark as Resolved</button> `;
-        }
-        
+
+        let assignedStaff = report.assignedStaff || "Not Assigned";
+
         reportsList.innerHTML += `
             <div class="admin-report-card">
-                <h3>Report #${index + 1}</h3>
-                <p><strong>Location:</strong> ${report.location}</p>
-                <p><strong>Description:</strong> ${report.description}</p>
-                <p><strong>Status:</strong> ${report.status}</p>
-                <p><strong>Date:</strong> ${report.date}</p>
-                ${button}
+
+                <div class="admin-report-top">
+                    <h3>Report #${index + 1}</h3>
+                    <span class="report-status ${report.status.toLowerCase().replace(" ", "-")}">
+                        ${report.status}
+                    </span>
+                </div>
+
+                <p>
+                    <strong>📍 Location:</strong>
+                    ${report.location}
+                </p>
+
+                <p>
+                    <strong>📝 Problem:</strong>
+                    ${report.description}
+                </p>
+
+                <p>
+                    <strong>👷 Assigned Staff:</strong>
+                    ${assignedStaff}
+                </p>
+
+                <p>
+                    <strong>🕐 Reported:</strong>
+                    ${report.date}
+                </p>
+
             </div>
         `;
     });
@@ -233,12 +253,18 @@ function updateAdminStats() {
         return report.status === "Pending";
     }).length;
 
+    let inProgress = reports.filter(function(report) {
+        return report.status === "In Progress";
+    }).length;
+
     let resolved = reports.filter(function(report) {
         return report.status === "Resolved";
     }).length;
 
+
     document.getElementById("totalReports").textContent = total;
     document.getElementById("pendingReports").textContent = pending;
+    document.getElementById("inProgressReports").textContent = inProgress;
     document.getElementById("resolvedReports").textContent = resolved;
 }
 if(document.getElementById("totalReports")){
