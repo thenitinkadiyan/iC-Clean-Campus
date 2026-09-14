@@ -742,13 +742,33 @@ function loadRecycleRequests() {
                     ${request.date}
                 </p>
 
-                ${
-                    request.status === "Pending"
-                    ? `<button onclick="acceptRecycleRequest(${index})">
-                        ✅ Accept Request
-                       </button>`
-                    : ""
-                }
+               ${
+    request.status === "Pending"
+    ? `
+        <div class="recycle-approval">
+
+            <input
+                type="number"
+                id="recyclePoints-${index}"
+                placeholder="Enter Points"
+                min="1"
+            >
+
+            <button
+                type="button"
+                onclick="acceptRecycleRequest(${index})">
+                ✅ Accept & Award Points
+            </button>
+
+        </div>
+      `
+    : `
+        <p class="points-awarded">
+            🏆 Points Awarded:
+            <strong>${request.points || 0}</strong>
+        </p>
+      `
+}
 
             </div>
         `;
@@ -764,51 +784,53 @@ function acceptRecycleRequest(index) {
         return;
     }
 
-    let points = prompt(
-        "Enter points to award for this recycle request:"
-    );
+    const pointsInput =
+        document.getElementById("recyclePoints-" + index);
 
-    if (points === null) {
+    if (!pointsInput) {
+        alert("Points field not found");
         return;
     }
 
-    points = Number(points);
+    let points = Number(pointsInput.value);
 
-    if (isNaN(points) || points <= 0) {
-        alert("Please enter a valid points number.");
+    if (!points || points <= 0) {
+        alert("Please enter valid points.");
         return;
     }
 
     requests[index].status = "Accepted";
     requests[index].points = points;
-    requests[index].pointsAwarded = false;
-
-    localStorage.setItem(
-        "recycleRequests",
-        JSON.stringify(requests)
-    );
-
+    requests[index].pointsAwarded = true;
 
     let studentGR = requests[index].studentGR;
 
-    if (studentGR && !requests[index].pointsAwarded) {
+    if (studentGR) {
 
         addStudentPoints(
             studentGR,
             points
         );
 
-        requests[index].pointsAwarded = true;
+    } else {
 
-        localStorage.setItem(
-            "recycleRequests",
-            JSON.stringify(requests)
+        alert(
+            "Student information not found. " +
+            "This request cannot receive points."
         );
+
+        return;
     }
+
+    localStorage.setItem(
+        "recycleRequests",
+        JSON.stringify(requests)
+    );
 
     alert(
         "Recycle Request Accepted!\n\n" +
-        points + " points awarded to the student."
+        points +
+        " points awarded to the student."
     );
 
     loadRecycleRequests();
