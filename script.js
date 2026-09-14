@@ -159,19 +159,20 @@ function submitReport() {
 
         let reports = JSON.parse(localStorage.getItem("report")) || [];
 
-        reports.push({
+       reports.push({
+    id: Date.now(),
 
-            problem: problem,
-            location: location,
+    studentGR: JSON.parse(
+        localStorage.getItem("loggedInStudent")
+    ).grNumber,
 
-            photo: event.target.result,
-
-            status: "In Progress",
-            assignedStaff: "Staff 02",
-
-            date: new Date().toLocaleString()
-
-        });
+    problem: problem,
+    location: location,
+    photo: event.target.result,
+    status: "In Progress",
+    assignedStaff: "Staff 02",
+    date: new Date().toLocaleString()
+});
 
         localStorage.setItem("report", JSON.stringify(reports));
 
@@ -299,42 +300,37 @@ function updateAdminStats() {
 if(document.getElementById("totalReports")){
     updateAdminStats();
 }
-function completeCleaning(index) {
+function completeCleaning(reportId) {
 
     const photoInput =
-        document.getElementById("afterPhoto-" + index);
+        document.getElementById("afterPhoto-" + reportId);
 
     if (!photoInput || !photoInput.files[0]) {
-
         alert("Please upload after-cleaning photo");
-
         return;
     }
 
     let reports =
-        JSON.parse(localStorage.getItem("report")) || [];
+        JSON.parse(localStorage.getItem("report")) || {};
 
-    if (!reports[index]) {
+    let index = reports.findIndex(function(report) {
+        return String(report.id) === String(reportId);
+    });
 
-        alert("Task not found");
-
+    if (index === -1) {
+        alert("Complaint not found");
         return;
     }
 
     reports[index].cleaningCompleted = true;
-
-    reports[index].status =
-        "Verification Pending";
+    reports[index].status = "Verification Pending";
 
     localStorage.setItem(
         "report",
         JSON.stringify(reports)
     );
 
-    alert(
-        "Cleaning completed!\n\n" +
-        "AI is now verifying the after-cleaning photo."
-    );
+    alert("Cleaning completed! AI verification started.");
 
     loadStaffTask();
 
@@ -343,20 +339,27 @@ function completeCleaning(index) {
         let reports =
             JSON.parse(localStorage.getItem("report")) || [];
 
-        if (!reports[index]) {
-            return;
-        }
+        let index = reports.findIndex(function(report) {
+            return String(report.id) === String(reportId);
+        });
 
-        if (
-            reports[index].status !==
-            "Verification Pending"
-        ) {
+        if (index === -1) {
             return;
         }
 
         reports[index].status = "Resolved";
-
         reports[index].aiVerified = true;
+
+
+        if (!reports[index].pointsAwarded) {
+
+            let studentGR = reports[index].studentGR;
+
+            if (studentGR) {
+                addStudentPoints(studentGR, 10);
+                reports[index].pointsAwarded = true;
+            }
+        }
 
         localStorage.setItem(
             "report",
@@ -654,14 +657,20 @@ function submitRecycleRequest() {
 
     let requests = JSON.parse(localStorage.getItem("recycleRequests")) || [];
 
-    requests.push({
-        type: type,
-        photo: photo.name,
-        location: location,
-        description: description,
-        status: "Pending",
-        date: new Date().toLocaleString()
-    });
+  requests.push({
+    id: Date.now(),
+
+    studentGR: JSON.parse(
+        localStorage.getItem("loggedInStudent")
+    ).grNumber,
+
+    type: type,
+    photo: photo.name,
+    location: location,
+    description: description,
+    status: "Pending",
+    date: new Date().toLocaleString()
+});
 
     localStorage.setItem("recycleRequests", JSON.stringify(requests));
 
@@ -747,13 +756,60 @@ function loadRecycleRequests() {
 }
 function acceptRecycleRequest(index) {
 
-    let requests = JSON.parse(localStorage.getItem("recycleRequests")) || [];
+    let requests =
+        JSON.parse(localStorage.getItem("recycleRequests")) || [];
+
+    if (!requests[index]) {
+        alert("Recycle Request not found");
+        return;
+    }
+
+    let points = prompt(
+        "Enter points to award for this recycle request:"
+    );
+
+    if (points === null) {
+        return;
+    }
+
+    points = Number(points);
+
+    if (isNaN(points) || points <= 0) {
+        alert("Please enter a valid points number.");
+        return;
+    }
 
     requests[index].status = "Accepted";
+    requests[index].points = points;
+    requests[index].pointsAwarded = false;
 
-    localStorage.setItem("recycleRequests", JSON.stringify(requests));
+    localStorage.setItem(
+        "recycleRequests",
+        JSON.stringify(requests)
+    );
 
-    alert("Recycle Request Accepted!");
+
+    let studentGR = requests[index].studentGR;
+
+    if (studentGR && !requests[index].pointsAwarded) {
+
+        addStudentPoints(
+            studentGR,
+            points
+        );
+
+        requests[index].pointsAwarded = true;
+
+        localStorage.setItem(
+            "recycleRequests",
+            JSON.stringify(requests)
+        );
+    }
+
+    alert(
+        "Recycle Request Accepted!\n\n" +
+        points + " points awarded to the student."
+    );
 
     loadRecycleRequests();
     updateRecycleRequestCount();
@@ -952,5 +1008,226 @@ if (document.getElementById("studentPoints")) {
 
     updateStudentStreak();
     updateStudentRewardDisplay();
+
+}
+function loadStudentProfile() {
+
+    let student = getCurrentStudent();
+
+    if (!student) {
+        return;
+    }
+
+
+    const nameElement =
+        document.getElementById("profileName");
+
+    if (nameElement) {
+        nameElement.textContent = student.name;
+    }
+
+
+    const grElement =
+        document.getElementById("profileGR");
+
+    if (grElement) {
+        grElement.textContent =
+            "GR Number: " + student.grNumber;
+    }
+
+
+
+    const pointsElement =
+        document.getElementById("profilePoints");
+
+    if (pointsElement) {
+        pointsElement.textContent =
+            getStudentPoints();
+    }
+
+
+
+    const streakElement =
+        document.getElementById("profileStreak");
+
+    if (streakElement) {
+        streakElement.textContent =
+            getStudentStreak();
+    }
+
+
+
+    loadLeaderboard();
+}
+
+
+
+function loadLeaderboard() {
+
+    const leaderboardList =
+        document.getElementById("leaderboardList");
+
+    if (!leaderboardList) {
+        return;
+    }
+
+    let students = [];
+
+
+    let registeredStudents =
+        JSON.parse(localStorage.getItem("students")) || [];
+
+    registeredStudents.forEach(function(student) {
+
+        students.push({
+            name: student.name,
+            grNumber: student.grNumber,
+            points: getPointsForStudent(student.grNumber)
+        });
+
+    });
+
+
+
+    const fixedStudents = [
+        {
+            name: "Tanisha",
+            grNumber: studentID1
+        },
+        {
+            name: "Gurpreet",
+            grNumber: studentID2
+        },
+        {
+            name: "Charu",
+            grNumber: studentID3
+        }
+    ];
+
+
+    fixedStudents.forEach(function(student) {
+
+        let alreadyExists =
+            students.some(function(existingStudent) {
+                return existingStudent.grNumber === student.grNumber;
+            });
+
+        if (!alreadyExists) {
+
+            students.push({
+                name: student.name,
+                grNumber: student.grNumber,
+                points: getPointsForStudent(student.grNumber)
+            });
+
+        }
+
+    });
+
+
+
+    students.sort(function(a, b) {
+        return b.points - a.points;
+    });
+
+
+    leaderboardList.innerHTML = "";
+
+
+    if (students.length === 0) {
+
+        leaderboardList.innerHTML =
+            "<p>No students found.</p>";
+
+        return;
+    }
+
+
+
+    let currentStudent =
+        getCurrentStudent();
+
+
+    students.forEach(function(student, index) {
+
+        let isCurrentStudent =
+            currentStudent &&
+            student.grNumber === currentStudent.grNumber;
+
+
+        let rank = index + 1;
+
+        let rankDisplay = rank;
+
+        if (rank === 1) {
+            rankDisplay = "🥇";
+        } else if (rank === 2) {
+            rankDisplay = "🥈";
+        } else if (rank === 3) {
+            rankDisplay = "🥉";
+        }
+
+
+        leaderboardList.innerHTML += `
+
+            <div class="leaderboard-item ${
+                isCurrentStudent ? "you" : ""
+            }">
+
+                <div class="leaderboard-left">
+
+                    <span class="leaderboard-rank">
+                        ${rankDisplay}
+                    </span>
+
+                    <span class="leaderboard-name">
+                        ${student.name}
+                        ${isCurrentStudent ? " (You)" : ""}
+                    </span>
+
+                </div>
+
+                <span class="leaderboard-points">
+                    🏆 ${student.points} pts
+                </span>
+
+            </div>
+
+        `;
+
+
+
+        if (isCurrentStudent) {
+
+            const rankElement =
+                document.getElementById("profileRank");
+
+            if (rankElement) {
+                rankElement.textContent =
+                    "#" + rank;
+            }
+
+        }
+
+    });
+
+}
+
+
+
+function getPointsForStudent(grNumber) {
+
+    let pointsData =
+        JSON.parse(localStorage.getItem("studentPoints")) || {};
+
+    return pointsData[grNumber] || 0;
+}
+
+
+
+if (document.getElementById("profileName")) {
+
+    updateStudentStreak();
+    loadStudentProfile();
 
 }
