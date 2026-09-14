@@ -1265,3 +1265,43 @@ body:has(.recycle-page) {
 .status-page > a:hover {
     background: #256b58;
 }
+
+.student-topbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.student-progress {
+    display: flex;
+    gap: 10px;
+}
+
+.student-progress span {
+    background: #ffffff;
+    padding: 9px 13px;
+    border: 1px solid #cfe5dc;
+    border-radius: 20px;
+    color: #2f5f52;
+    font-size: 14px;
+    box-shadow: 0 3px 10px #dcebe5;
+}
+
+.profile-circle {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid #cfe5dc;
+    background: #ffffff;
+    color: #2f5f52;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px #dcebe5;
+}
+
+.profile-circle:hover {
+    background: #e8f3ee;
+}

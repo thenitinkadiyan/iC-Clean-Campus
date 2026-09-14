@@ -31,14 +31,26 @@ function login(){
         return;
     }
     if(id===studentID1 && password===studentPassword1){
+        localStorage.setItem("loggedInStudent",JSON.stringify({
+            name:"Tanisha",grNumber:studentID1
+        })
+        );
         window.location.href = "student-dashboard.html";
         return;
     }
     if(id===studentID2 && password===studentPassword2){
+         localStorage.setItem("loggedInStudent",JSON.stringify({
+            name:"Gurpreet",grNumber:studentID2
+        })
+        );
         window.location.href = "student-dashboard.html";
         return;
     }
     if(id===studentID3 && password===studentPassword3){
+         localStorage.setItem("loggedInStudent",JSON.stringify({
+            name:"Charu",grNumber:studentID3
+        })
+        );
         window.location.href = "student-dashboard.html";
         return;
     }
@@ -47,6 +59,10 @@ function login(){
         return s.grNumber===id && s.password===password;
     });
     if(student){
+         localStorage.setItem("loggedInStudent",JSON.stringify({
+            name:student.name,grNumber:student.grNumber
+        })
+        );
         window.location.href="student-dashboard.html";
         return;
     }
@@ -787,4 +803,154 @@ function loadRecentReports() {
 }
 if(document.getElementById("recentReportsList")){
     loadRecentReports();
+}
+function getCurrentStudent() {
+
+    let loggedInStudent =
+        JSON.parse(localStorage.getItem("loggedInStudent"));
+
+    if (loggedInStudent) {
+        return loggedInStudent;
+    }
+
+    return null;
+}
+
+
+
+function getStudentPoints() {
+
+    let student = getCurrentStudent();
+
+    if (!student) {
+        return 0;
+    }
+
+    let pointsData =
+        JSON.parse(localStorage.getItem("studentPoints")) || {};
+
+    return pointsData[student.grNumber] || 0;
+}
+
+
+function addStudentPoints(grNumber, points) {
+
+    let pointsData =
+        JSON.parse(localStorage.getItem("studentPoints")) || {};
+
+    if (!pointsData[grNumber]) {
+        pointsData[grNumber] = 0;
+    }
+
+    pointsData[grNumber] += points;
+
+    localStorage.setItem(
+        "studentPoints",
+        JSON.stringify(pointsData)
+    );
+}
+
+
+function updateStudentStreak() {
+
+    let student = getCurrentStudent();
+
+    if (!student) {
+        return;
+    }
+
+    let streakData =
+        JSON.parse(localStorage.getItem("studentStreak")) || {};
+
+    let today = new Date().toDateString();
+
+    if (!streakData[student.grNumber]) {
+
+        streakData[student.grNumber] = {
+            streak: 1,
+            lastDate: today
+        };
+
+    } else {
+
+        let lastDate =
+            streakData[student.grNumber].lastDate;
+
+        if (lastDate !== today) {
+
+            let last = new Date(lastDate);
+            let now = new Date();
+
+            let difference =
+                Math.floor(
+                    (now - last) / (1000 * 60 * 60 * 24)
+                );
+
+            if (difference === 1) {
+
+                streakData[student.grNumber].streak += 1;
+
+            } else {
+
+                streakData[student.grNumber].streak = 1;
+
+            }
+
+            streakData[student.grNumber].lastDate = today;
+        }
+    }
+
+    localStorage.setItem(
+        "studentStreak",
+        JSON.stringify(streakData)
+    );
+}
+
+
+function getStudentStreak() {
+
+    let student = getCurrentStudent();
+
+    if (!student) {
+        return 0;
+    }
+
+    let streakData =
+        JSON.parse(localStorage.getItem("studentStreak")) || {};
+
+    if (!streakData[student.grNumber]) {
+        return 0;
+    }
+
+    return streakData[student.grNumber].streak;
+}
+
+
+
+function updateStudentRewardDisplay() {
+
+    let pointsElement =
+        document.getElementById("studentPoints");
+
+    let streakElement =
+        document.getElementById("studentStreak");
+
+    if (pointsElement) {
+        pointsElement.textContent =
+            getStudentPoints();
+    }
+
+    if (streakElement) {
+        streakElement.textContent =
+            getStudentStreak();
+    }
+}
+
+
+
+if (document.getElementById("studentPoints")) {
+
+    updateStudentStreak();
+    updateStudentRewardDisplay();
+
 }
