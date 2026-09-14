@@ -129,10 +129,10 @@ function getCurrentLocation() {
 function submitReport() {
 
     const photo = document.getElementById("garbagePhoto").files[0];
+    const problem = document.getElementById("problem").value;
     const location = document.getElementById("locationText").value;
-    const description = document.getElementById("description").value;
 
-    if (!photo || location === "" || description === "") {
+    if (!photo || problem === "" || location === "") {
         alert("ERROR: Please fill all details");
         return;
     }
@@ -144,18 +144,25 @@ function submitReport() {
         let reports = JSON.parse(localStorage.getItem("report")) || [];
 
         reports.push({
-            id: Date.now(),
-            photo: event.target.result,
+
+            problem: problem,
             location: location,
-            description: description,
+
+            photo: event.target.result,
+
             status: "In Progress",
             assignedStaff: "Staff 02",
+
             date: new Date().toLocaleString()
+
         });
 
         localStorage.setItem("report", JSON.stringify(reports));
 
-        alert("Report Submitted Successfully!\n\nStaff 02 has been assigned automatically.");
+        alert(
+            "Report Submitted Successfully!\n\n" +
+            "Staff 02 has been assigned automatically."
+        );
 
         window.location.href = "student-dashboard.html";
     };
@@ -278,47 +285,67 @@ if(document.getElementById("totalReports")){
 }
 function completeCleaning(index) {
 
-    const photoInput = document.getElementById("afterPhoto-" + index);
+    const photoInput =
+        document.getElementById("afterPhoto-" + index);
 
     if (!photoInput || !photoInput.files[0]) {
+
         alert("Please upload after-cleaning photo");
+
         return;
     }
 
-    let reports = JSON.parse(localStorage.getItem("report")) || [];
+    let reports =
+        JSON.parse(localStorage.getItem("report")) || [];
 
     if (!reports[index]) {
+
         alert("Task not found");
+
         return;
     }
 
     reports[index].cleaningCompleted = true;
-    reports[index].status = "Verification Pending";
 
-    localStorage.setItem("report", JSON.stringify(reports));
+    reports[index].status =
+        "Verification Pending";
 
-    alert("Cleaning completed!\n\nAI is now verifying the photo.");
+    localStorage.setItem(
+        "report",
+        JSON.stringify(reports)
+    );
+
+    alert(
+        "Cleaning completed!\n\n" +
+        "AI is now verifying the after-cleaning photo."
+    );
 
     loadStaffTask();
 
     setTimeout(function() {
 
-        let reports = JSON.parse(localStorage.getItem("report")) || [];
+        let reports =
+            JSON.parse(localStorage.getItem("report")) || [];
 
         if (!reports[index]) {
             return;
         }
 
-        if (reports[index].status !== "Verification Pending") {
+        if (
+            reports[index].status !==
+            "Verification Pending"
+        ) {
             return;
         }
 
         reports[index].status = "Resolved";
+
         reports[index].aiVerified = true;
 
-        localStorage.setItem("report", JSON.stringify(reports));
-
-        loadStaffTask();
+        localStorage.setItem(
+            "report",
+            JSON.stringify(reports)
+        );
 
     }, 3000);
 }
@@ -339,28 +366,50 @@ function loadStaffTask() {
     }
 
     let tasks = reports.filter(function(report) {
+
         return report.assignedStaff === "Staff 02" &&
                report.status === "In Progress";
+
     });
 
     if (tasks.length === 0) {
+
         taskCard.innerHTML = `
-            <h3>🎉 No Cleaning Task</h3>
-            <p>Abhi koi cleaning task assigned nahi hai.</p>
+            <div class="no-task">
+                <h3>🎉 No Cleaning Task</h3>
+                <p>Abhi koi cleaning task assigned nahi hai.</p>
+            </div>
         `;
+
         return;
     }
 
     taskCard.innerHTML = "";
 
-    tasks.forEach(function(task) {
+    tasks.forEach(function(task, taskNumber) {
 
         let index = reports.indexOf(task);
 
         taskCard.innerHTML += `
+
             <div class="staff-task-item">
 
-                <h3>🗑️ ${task.description}</h3>
+                <div class="task-top">
+
+                    <h3>
+                        Task #${taskNumber + 1}
+                    </h3>
+
+                    <span class="priority high">
+                        Cleaning Required
+                    </span>
+
+                </div>
+
+                <p>
+                    <strong>🗑️ Problem:</strong><br>
+                    ${task.problem || task.description || "Garbage"}
+                </p>
 
                 <p>
                     <strong>📍 Location:</strong><br>
@@ -368,21 +417,47 @@ function loadStaffTask() {
                 </p>
 
                 <p>
+                    <strong>🕐 Reported:</strong><br>
+                    ${task.date}
+                </p>
+
+                <div class="before-photo">
+
+                    <h4>📷 Student Report Photo</h4>
+
+                    ${
+                        task.photo
+                        ?
+                        `<img src="${task.photo}" alt="Student Report Photo">`
+                        :
+                        `<p>No photo available.</p>`
+                    }
+
+                </div>
+
+                <p>
                     <strong>🧹 Please clean the area.</strong>
                 </p>
 
-                <button type="button" onclick="viewTaskLocation()">
+                <button
+                    type="button"
+                    onclick="viewTaskLocation()">
                     📍 Open Location
                 </button>
 
-                <label>📷 Upload After-Cleaning Photo</label>
+                <label>
+                    📷 Upload After-Cleaning Photo
+                </label>
 
-                <input type="file"
-                       id="afterPhoto-${index}"
-                       accept="image/*">
+                <input
+                    type="file"
+                    id="afterPhoto-${index}"
+                    accept="image/*"
+                >
 
-                <button type="button"
-                        onclick="completeCleaning(${index})">
+                <button
+                    type="button"
+                    onclick="completeCleaning(${index})">
                     ✅ Kaam Complete
                 </button>
 

@@ -16,8 +16,19 @@
     <div id="map"></div>
     <button type="button" onclick="getCurrrentLocation()">Use My Location</button>
     <input type="text" id="locationText" placeholder="Selected Location" readonly>
-    <lable>Description</lable>
-    <textarea id="description" placeholder="Describe the cleanliness issue"></textarea>
+   <label>Problem</label>
+<input
+    type="text"
+    id="problem"
+    placeholder="e.g. Dustbin Overflow"
+>
+
+<label>Location</label>
+<input
+    type="text"
+    id="locationText"
+    placeholder="e.g. Block 3, 5th Floor"
+>
     <button type="button" onclick="submitReport()">Submit Report</button>
     <a href="student-dashboard.html">Back to Dashboard</a>
 </div>
