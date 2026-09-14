@@ -1231,3 +1231,139 @@ if (document.getElementById("profileName")) {
     loadStudentProfile();
 
 }
+
+function loadAchievements() {
+
+    const achievementList =
+        document.getElementById("achievementList");
+
+    if (!achievementList) {
+        return;
+    }
+
+    let student = getCurrentStudent();
+
+    if (!student) {
+        return;
+    }
+
+    let reports =
+        JSON.parse(localStorage.getItem("report")) || [];
+
+    let recycleRequests =
+        JSON.parse(
+            localStorage.getItem("recycleRequests")
+        ) || [];
+
+    let studentReports =
+        reports.filter(function(report) {
+            return report.studentGR === student.grNumber;
+        });
+
+    let studentRecycleRequests =
+        recycleRequests.filter(function(request) {
+            return request.studentGR === student.grNumber;
+        });
+
+
+
+    let reporterUnlocked =
+        studentReports.length > 0;
+
+
+
+    let recyclerUnlocked =
+        studentRecycleRequests.some(function(request) {
+            return request.status === "Accepted";
+        });
+
+
+
+    let streakUnlocked =
+        getStudentStreak() >= 7;
+
+
+    achievementList.innerHTML = `
+
+        <div class="achievement-card ${
+            reporterUnlocked ? "unlocked" : "locked"
+        }">
+
+            <span>🗑️</span>
+
+            <div>
+                <h3>Clean Campus Reporter</h3>
+
+                <p>
+                    Submit your first garbage report.
+                </p>
+
+                <strong>
+                    ${
+                        reporterUnlocked
+                        ? "✅ Unlocked"
+                        : "🔒 Locked"
+                    }
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="achievement-card ${
+            recyclerUnlocked ? "unlocked" : "locked"
+        }">
+
+            <span>♻️</span>
+
+            <div>
+                <h3>Eco Recycler</h3>
+
+                <p>
+                    Complete your first recycle request.
+                </p>
+
+                <strong>
+                    ${
+                        recyclerUnlocked
+                        ? "✅ Unlocked"
+                        : "🔒 Locked"
+                    }
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="achievement-card ${
+            streakUnlocked ? "unlocked" : "locked"
+        }">
+
+            <span>🔥</span>
+
+            <div>
+                <h3>Streak Champion</h3>
+
+                <p>
+                    Maintain a 7-day activity streak.
+                </p>
+
+                <strong>
+                    ${
+                        streakUnlocked
+                        ? "✅ Unlocked"
+                        : "🔒 Locked"
+                    }
+                </strong>
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+
+if (document.getElementById("achievementList")) {
+    loadAchievements();
+}

@@ -1497,3 +1497,22 @@ body:has(.profile-page) {
     }
 
 }
+.achievement-card.locked {
+    opacity: 0.55;
+}
+
+.achievement-card.unlocked {
+    border: 2px solid #9bcfbd;
+    background: #f7fcfa;
+}
+
+.achievement-card strong {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #2f8068;
+}
+
+.achievement-card.locked strong {
+    color: #8a9993;
+}
