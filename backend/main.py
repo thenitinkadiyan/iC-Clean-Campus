@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from database import engine, Base, SessionLocal
-from models import User
+from models import User,CleaningTask
 from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
@@ -98,16 +98,53 @@ def login_user(
         "name": user.name,
         "login_id": user.login_id,
         "gr_number": user.gr_number,
-        "role": user.role
+        "role": user.role,
+        "area": user.area
     }
 @app.post("/main-admin/add-user")
 def add_user(
     name: str,
-    gr_number: str,
+    login_id: str,
     password: str,
     role: str,
     area: str
 ):
+    db = SessionLocal()
+
+    if role not in ["admin", "staff"]:
+        db.close()
+        return {"message": "Invalid role"}
+
+    existing_user = db.query(User).filter(
+        User.login_id == login_id
+    ).first()
+
+    if existing_user:
+        db.close()
+        return {"message": "Login ID already registered"}
+
+    user = User(
+        name=name,
+        login_id=login_id,
+        gr_number=None,
+        password=password,
+        role=role,
+        area=area
+    )
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    db.close()
+
+    return {
+        "message": role.capitalize() + " created successfully",
+        "user_id": user.id,
+        "name": user.name,
+        "login_id": user.login_id,
+        "area": user.area,
+        "role": user.role
+    }
     db = SessionLocal()
 
     if role not in ["admin", "staff"]:
@@ -145,4 +182,37 @@ def add_user(
         "gr_number": user.gr_number,
         "area": area,
         "role": user.role
+    }
+@app.post("/cleaning-tasks")
+def create_cleaning_task(
+    title: str,
+    description: str,
+    location: str,
+    area: str,
+    priority: str,
+    staff_id: int
+):
+    db = SessionLocal()
+
+    task = CleaningTask(
+        title=title,
+        description=description,
+        location=location,
+        area=area,
+        priority=priority,
+        staff_id=staff_id,
+        status="assigned"
+    )
+
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+    db.close()
+
+    return {
+        "message": "Cleaning task assigned successfully",
+        "task_id": task.id,
+        "staff_id": task.staff_id,
+        "area": task.area,
+        "status": task.status
     }

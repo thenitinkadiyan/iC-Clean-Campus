@@ -1394,3 +1394,126 @@ function loadAchievements() {
 if (document.getElementById("achievementList")) {
     loadAchievements();
 }
+function showAddAdmin() {
+    document.getElementById("adminModal").style.display = "flex";
+}
+
+function showAddStaff() {
+    document.getElementById("staffModal").style.display = "flex";
+}
+
+function closeAdminModal() {
+    document.getElementById("adminModal").style.display = "none";
+    document.getElementById("staffModal").style.display = "none";
+}
+
+async function addAdmin() {
+    const name = document.getElementById("newAdminName").value.trim();
+    const loginId = document.getElementById("newAdminID").value.trim();
+    const password = document.getElementById("newAdminPassword").value;
+    const area = document.getElementById("newAdminArea").value.trim();
+
+    if (!name || !loginId || !password || !area) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `http://127.0.0.1:8001/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=admin&area=${encodeURIComponent(area)}`,
+            { method: "POST" }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || data.message !== "Admin created successfully") {
+            alert(data.message || "Failed to create Admin");
+            return;
+        }
+
+        alert("Admin created successfully!");
+
+        document.getElementById("newAdminName").value = "";
+        document.getElementById("newAdminID").value = "";
+        document.getElementById("newAdminPassword").value = "";
+        document.getElementById("newAdminArea").value = "";
+
+        closeAdminModal();
+
+    } catch (error) {
+        console.error(error);
+        alert("Backend connection failed");
+    }
+}
+
+async function addStaff() {
+    const name = document.getElementById("newStaffName").value.trim();
+    const loginId = document.getElementById("newStaffID").value.trim();
+    const password = document.getElementById("newStaffPassword").value;
+    const area = document.getElementById("newStaffArea").value.trim();
+
+    if (!name || !loginId || !password || !area) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `http://127.0.0.1:8001/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=staff&area=${encodeURIComponent(area)}`,
+            { method: "POST" }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || data.message !== "Staff created successfully") {
+            alert(data.message || "Failed to create Staff");
+            return;
+        }
+
+        alert("Staff created successfully!");
+
+        document.getElementById("newStaffName").value = "";
+        document.getElementById("newStaffID").value = "";
+        document.getElementById("newStaffPassword").value = "";
+        document.getElementById("newStaffArea").value = "";
+
+        closeAdminModal();
+
+    } catch (error) {
+        console.error(error);
+        alert("Backend connection failed");
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!user) {
+        return;
+    }
+
+    const adminName = document.getElementById("adminName");
+    const adminLoginId = document.getElementById("adminLoginId");
+    const adminArea = document.getElementById("adminArea");
+
+    if (adminName) {
+        adminName.textContent = user.name || "Admin";
+        adminLoginId.textContent = user.login_id || "-";
+        adminArea.textContent = user.area || "-";
+    }
+
+    const staffName = document.getElementById("staffName");
+    const staffLoginId = document.getElementById("staffLoginId");
+    const staffArea = document.getElementById("staffArea");
+
+    if (staffName) {
+        staffName.textContent = user.name || "Staff";
+        staffLoginId.textContent = user.login_id || "-";
+        staffArea.textContent = user.area || "-";
+    }
+
+    const staffGreetingName = document.getElementById("staffGreetingName");
+    if (staffGreetingName) {
+        staffGreetingName.textContent = user.name || "Staff";
+    }
+
+});
