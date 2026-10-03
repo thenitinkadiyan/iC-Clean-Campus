@@ -10,63 +10,59 @@ const studentID2 = "124460";
 const studentPassword2 = "gurpreet";
 const studentID3 = "123902";
 const studentPassword3 = "charu";
+async function login() {
+    const inputs = document.querySelectorAll(".login-box input");
 
-function login(){
-        const id = document.querySelector('.login-box input[type="text"]').value;
-        const password = document.querySelector('.login-box input[type="password"]').value;
-    if(id===""||password===""){
-        alert("ERROR: Please enter both ID and Password");
+    const loginId = inputs[0].value.trim();
+    const password = inputs[1].value;
+
+    if (!loginId || !password) {
+        alert("Please enter ID and Password");
         return;
     }
-    if(id===adminID1 && password===adminPassword1){
-        window.location.href = "admin-dashboard.html";
-        return;
+
+    try {
+       const response = await fetch(
+    `http://127.0.0.1:8001/login?login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}`,
+    {
+        method: "POST"
     }
-    if(id===adminID2 && password===adminPassword2){
-        window.location.href = "admin-dashboard.html";
-        return;
+);
+
+        const data = await response.json();
+
+        if (!response.ok || data.message !== "Login successful") {
+            alert(data.message || "Invalid ID or Password");
+            return;
+        }
+
+        localStorage.setItem("loggedInUser", JSON.stringify(data));
+
+        if (data.role === "main_admin") {
+            window.location.href = "main-admin-dashboard.html";
+        }
+        else if (data.role === "admin") {
+            window.location.href = "admin-dashboard.html";
+        }
+        else if (data.role === "staff") {
+            window.location.href = "staff-dashboard.html";
+        }
+        else if (data.role === "student") {
+            localStorage.setItem("loggedInStudent", JSON.stringify({
+                name: data.name,
+                grNumber: data.gr_number
+            }));
+
+            window.location.href = "student-dashboard.html";
+        }
+        else {
+            alert("Unknown user role");
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Backend se connection nahi ho pa raha.");
     }
-    if(id===staffID1 && password===staffPassword1){
-        window.location.href = "staff-dashboard.html";
-        return;
-    }
-    if(id===studentID1 && password===studentPassword1){
-        localStorage.setItem("loggedInStudent",JSON.stringify({
-            name:"Tanisha",grNumber:studentID1
-        })
-        );
-        window.location.href = "student-dashboard.html";
-        return;
-    }
-    if(id===studentID2 && password===studentPassword2){
-         localStorage.setItem("loggedInStudent",JSON.stringify({
-            name:"Gurpreet",grNumber:studentID2
-        })
-        );
-        window.location.href = "student-dashboard.html";
-        return;
-    }
-    if(id===studentID3 && password===studentPassword3){
-         localStorage.setItem("loggedInStudent",JSON.stringify({
-            name:"Charu",grNumber:studentID3
-        })
-        );
-        window.location.href = "student-dashboard.html";
-        return;
-    }
-    let students=JSON.parse(localStorage.getItem("students"))||[];
-    let student=students.find(function(s){
-        return s.grNumber===id && s.password===password;
-    });
-    if(student){
-         localStorage.setItem("loggedInStudent",JSON.stringify({
-            name:student.name,grNumber:student.grNumber
-        })
-        );
-        window.location.href="student-dashboard.html";
-        return;
-    }
-    alert("ERROR: Invalid ID or Password");
 }
 function registerStudent(){
         const name= document.getElementById("studentName").value;
@@ -81,14 +77,23 @@ function registerStudent(){
             alert("ERROR:Passwords do not match");
             return;
         }
-    let students=JSON.parse(localStorage.getItem("students"))||[];
-    students.push({
-        name:name,
-        grNumber:grNumber,
-        password:password
-    });
-    localStorage.setItem("students",JSON.stringify(students));
-    alert("Registration Successfull!");
+   fetch("http://127.0.0.1:8001/register?name=" + encodeURIComponent(name) + "&gr_number=" + encodeURIComponent(grNumber) + "&password=" + encodeURIComponent(password), {
+    method: "POST"
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error("Registration failed");
+    }
+    return response.json();
+})
+.then(data => {
+    alert("Registration Successful!");
+    window.location.href = "login.html";
+})
+.catch(error => {
+    console.error(error);
+    alert("Registration failed. Please try again.");
+});
     
     window.location.href="login.html";
 }
