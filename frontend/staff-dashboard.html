@@ -29,5 +29,49 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+async function loadStaffTask() {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!user || user.role !== "staff") {
+        return;
+    }
+
+    const taskBox = document.getElementById("staffTask");
+
+    try {
+        const response = await fetch(
+            `http://127.0.0.1:8001/cleaning-tasks/staff/${user.user_id}`
+        );
+
+        const data = await response.json();
+
+        if (!data.task_id) {
+            taskBox.innerHTML = `
+                <p>No Cleaning Task</p>
+                <small>Abhi koi cleaning task assigned nahi hai.</small>
+            `;
+            return;
+        }
+
+        taskBox.innerHTML = `
+            <h3>${data.title}</h3>
+            <p>${data.description || ""}</p>
+            <p><strong>Location:</strong> ${data.location}</p>
+            <p><strong>Area:</strong> ${data.area || "-"}</p>
+            <p><strong>Priority:</strong> ${data.priority}</p>
+            <p><strong>Status:</strong> ${data.status}</p>
+        `;
+
+    } catch (error) {
+        console.error(error);
+        taskBox.innerHTML = `
+            <p>Unable to load cleaning task.</p>
+        `;
+    }
+}
+
+loadStaffTask();
+</script>
 </body>
 </html> 

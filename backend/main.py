@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from database import engine, Base, SessionLocal
-from models import User,CleaningTask
+from models import User,CleaningTask,Report
 from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
@@ -215,4 +215,130 @@ def create_cleaning_task(
         "staff_id": task.staff_id,
         "area": task.area,
         "status": task.status
+    }
+@app.get("/cleaning-tasks/staff/{staff_id}")
+def get_staff_task(staff_id: int):
+    db = SessionLocal()
+
+    task = db.query(CleaningTask).filter(
+        CleaningTask.staff_id == staff_id,
+        CleaningTask.status == "assigned"
+    ).first()
+
+    db.close()
+
+    if not task:
+        return {
+            "message": "No cleaning task assigned"
+        }
+
+    return {
+        "task_id": task.id,
+        "title": task.title,
+        "description": task.description,
+        "location": task.location,
+        "area": task.area,
+        "priority": task.priority,
+        "status": task.status
+    }
+@app.get("/staff")
+def get_staff():
+
+    db = SessionLocal()
+
+    staff_members = db.query(User).filter(
+        User.role == "staff"
+    ).all()
+
+    result = []
+
+    for staff in staff_members:
+        result.append({
+            "user_id": staff.id,
+            "name": staff.name,
+            "login_id": staff.login_id,
+            "area": staff.area
+        })
+
+    db.close()
+
+    return result
+@app.post("/reports")
+def create_report(
+    student_id: int,
+    problem: str,
+    location: str,
+    description: str = "",
+    photo: str = "",
+    area: str = ""
+):
+    db = SessionLocal()
+
+    report = Report(
+        student_id=student_id,
+        problem=problem,
+        location=location,
+        description=description,
+        photo=photo,
+        area=area,
+        status="submitted"
+    )
+
+    db.add(report)
+    db.commit()
+    db.refresh(report)
+    db.close()
+
+    return {
+        "message": "Report submitted successfully",
+        "report_id": report.id,
+        "status": report.status
+    }
+@app.get("/reports")
+def get_reports():
+    db = SessionLocal()
+
+    reports = db.query(Report).order_by(
+        Report.id.desc()
+    ).all()
+
+    result = []
+
+    for report in reports:
+        result.append({
+            "id": report.id,
+            "student_id": report.student_id,
+            "problem": report.problem,
+            "location": report.location,
+            "description": report.description,
+            "photo": report.photo,
+            "area": report.area,
+            "status": report.status,
+            "assigned_staff_id": report.assigned_staff_id,
+            "pending_reason": report.pending_reason
+        })
+
+    db.close()
+
+    return result
+@app.get("/admin/stats")
+def get_admin_stats():
+    db = SessionLocal()
+
+    total_reports = db.query(Report).count()
+
+    in_progress = db.query(Report).filter(
+        Report.status.in_(["assigned", "cleaning", "in_progress"])
+    ).count()
+
+    resolved = db.query(Report).filter(
+        Report.status == "resolved"
+    ).count()
+
+    db.close()
+
+    return {
+        "total_reports": total_reports,
+        "in_progress": in_progress,
+        "resolved": resolved
     }

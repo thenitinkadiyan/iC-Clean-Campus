@@ -32,3 +32,26 @@ class CleaningTask(Base):
 
     before_photo = Column(String, nullable=True)
     after_photo = Column(String, nullable=True)
+class Report(Base):
+    __tablename__ = "reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    student_id = Column(Integer, nullable=False)
+    problem = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+
+    photo = Column(String, nullable=True)
+
+    area = Column(String, nullable=True)
+
+    status = Column(
+        String,
+        default="submitted",
+        nullable=False
+    )
+
+    assigned_staff_id = Column(Integer, nullable=True)
+
+    pending_reason = Column(String, nullable=True)
