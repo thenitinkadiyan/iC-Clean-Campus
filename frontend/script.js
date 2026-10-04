@@ -23,7 +23,7 @@ async function login() {
 
     try {
        const response = await fetch(
-    `http://127.0.0.1:8001/login?login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}`,
+    `http://ic-clean-campus.onrender.com/login?login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}`,
     {
         method: "POST"
     }
@@ -77,7 +77,7 @@ function registerStudent(){
             alert("ERROR:Passwords do not match");
             return;
         }
-   fetch("http://127.0.0.1:8001/register?name=" + encodeURIComponent(name) + "&gr_number=" + encodeURIComponent(grNumber) + "&password=" + encodeURIComponent(password), {
+   fetch("http://ic-clean-campus.onrender.com/register?name=" + encodeURIComponent(name) + "&gr_number=" + encodeURIComponent(grNumber) + "&password=" + encodeURIComponent(password), {
     method: "POST"
 })
 .then(response => {
