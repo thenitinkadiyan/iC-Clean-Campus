@@ -22,46 +22,76 @@ async function login() {
     }
 
     try {
-       const response = await fetch(
-    `https://ic-clean-campus.onrender.com/login?login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}`,
-    {
-        method: "POST"
-    }
-);
+        const formData = new URLSearchParams();
+
+        formData.append("login_id", loginId);
+        formData.append("password", password);
+
+        const response = await fetch(
+            "https://ic-clean-campus.onrender.com/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formData
+            }
+        );
 
         const data = await response.json();
+
+        console.log("Login response:", data);
 
         if (!response.ok || data.message !== "Login successful") {
             alert(data.message || "Invalid ID or Password");
             return;
         }
 
-        localStorage.setItem("loggedInUser", JSON.stringify(data));
+        localStorage.setItem(
+            "loggedInUser",
+            JSON.stringify(data)
+        );
 
         if (data.role === "main_admin") {
-            window.location.href = "main-admin-dashboard.html";
-        }
-        else if (data.role === "admin") {
-            window.location.href = "admin-dashboard.html";
-        }
-        else if (data.role === "staff") {
-            window.location.href = "staff-dashboard.html";
-        }
-        else if (data.role === "student") {
-            localStorage.setItem("loggedInStudent", JSON.stringify({
-                name: data.name,
-                grNumber: data.gr_number
-            }));
 
-            window.location.href = "student-dashboard.html";
-        }
-        else {
-            alert("Unknown user role");
+            window.location.href =
+                "main-admin-dashboard.html";
+
+        } else if (data.role === "admin") {
+
+            window.location.href =
+                "admin-dashboard.html";
+
+        } else if (data.role === "staff") {
+
+            window.location.href =
+                "staff-dashboard.html";
+
+        } else if (data.role === "student") {
+
+            localStorage.setItem(
+                "loggedInStudent",
+                JSON.stringify({
+                    name: data.name,
+                    grNumber: data.gr_number
+                })
+            );
+
+            window.location.href =
+                "student-dashboard.html";
+
+        } else {
+
+            alert("Unknown user role: " + data.role);
         }
 
     } catch (error) {
-        console.error(error);
-        alert("Backend server is not responding. Please try again later.");
+
+        console.error("Login error:", error);
+
+        alert(
+            "Backend se connection nahi ho pa raha."
+        );
     }
 }
 function registerStudent(){
