@@ -1263,6 +1263,8 @@ function showAddStaff() {
 
 function closeAdminModal() {
     document.getElementById("adminModal").style.display = "none";
+}
+function closeStaffModal() {
     document.getElementById("staffModal").style.display = "none";
 }
 
