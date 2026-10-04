@@ -1277,16 +1277,37 @@ async function addAdmin() {
         return;
     }
 
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+        alert("Session expired. Please login again.");
+        window.location.href = "login.html";
+        return;
+    }
+
     try {
         const response = await fetch(
-            `https://ic-clean-campus.onrender.com/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=admin&area=${encodeURIComponent(area)}`,
-            { method: "POST" }
+            "https://ic-clean-campus.onrender.com/main-admin/add-user",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    name: name,
+                    login_id: loginId,
+                    password: password,
+                    role: "admin",
+                    area: area
+                })
+            }
         );
 
         const data = await response.json();
 
-        if (!response.ok || data.message !== "Admin created successfully") {
-            alert(data.message || "Failed to create Admin");
+        if (!response.ok) {
+            alert(data.detail || "Failed to create admin");
             return;
         }
 
@@ -1300,7 +1321,7 @@ async function addAdmin() {
         closeAdminModal();
 
     } catch (error) {
-        console.error(error);
+        console.error("Add admin error:", error);
         alert("Backend connection failed");
     }
 }
@@ -1316,16 +1337,37 @@ async function addStaff() {
         return;
     }
 
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+        alert("Session expired. Please login again.");
+        window.location.href = "login.html";
+        return;
+    }
+
     try {
         const response = await fetch(
-            `https://ic-clean-campus.onrender.com/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=staff&area=${encodeURIComponent(area)}`,
-            { method: "POST" }
+            "https://ic-clean-campus.onrender.com/main-admin/add-user",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    name: name,
+                    login_id: loginId,
+                    password: password,
+                    role: "staff",
+                    area: area
+                })
+            }
         );
 
         const data = await response.json();
 
-        if (!response.ok || data.message !== "Staff created successfully") {
-            alert(data.message || "Failed to create Staff");
+        if (!response.ok) {
+            alert(data.detail || "Failed to create staff");
             return;
         }
 
@@ -1336,10 +1378,10 @@ async function addStaff() {
         document.getElementById("newStaffPassword").value = "";
         document.getElementById("newStaffArea").value = "";
 
-        closeAdminModal();
+        closeStaffModal();
 
     } catch (error) {
-        console.error(error);
+        console.error("Add staff error:", error);
         alert("Backend connection failed");
     }
 }
