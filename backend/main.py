@@ -342,3 +342,26 @@ def get_admin_stats():
         "in_progress": in_progress,
         "resolved": resolved
     }
+@app.get("/students/leaderboard")
+def get_student_leaderboard():
+    db = SessionLocal()
+
+    students = db.query(User).filter(
+        User.role == "student"
+    ).order_by(
+        User.points.desc()
+    ).all()
+
+    result = []
+
+    for student in students:
+        result.append({
+            "id": student.id,
+            "name": student.name,
+            "gr_number": student.gr_number,
+            "points": student.points
+        })
+
+    db.close()
+
+    return result

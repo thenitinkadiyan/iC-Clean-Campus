@@ -1089,7 +1089,7 @@ function loadStudentProfile() {
 
 
 
-function loadLeaderboard() {
+async function loadLeaderboard() {
 
     const leaderboardList =
         document.getElementById("leaderboardList");
@@ -1098,148 +1098,108 @@ function loadLeaderboard() {
         return;
     }
 
-    let students = [];
+    try {
 
+        const response = await fetch(
+            "https://ic-clean-campus.onrender.com/students/leaderboard"
+        );
 
-    let registeredStudents =
-        JSON.parse(localStorage.getItem("students")) || [];
-
-    registeredStudents.forEach(function(student) {
-
-        students.push({
-            name: student.name,
-            grNumber: student.grNumber,
-            points: getPointsForStudent(student.grNumber)
-        });
-
-    });
-
-
-
-    const fixedStudents = [
-        {
-            name: "Tanisha",
-            grNumber: studentID1
-        },
-        {
-            name: "Gurpreet",
-            grNumber: studentID2
-        },
-        {
-            name: "Charu",
-            grNumber: studentID3
-        }
-    ];
-
-
-    fixedStudents.forEach(function(student) {
-
-        let alreadyExists =
-            students.some(function(existingStudent) {
-                return existingStudent.grNumber === student.grNumber;
-            });
-
-        if (!alreadyExists) {
-
-            students.push({
-                name: student.name,
-                grNumber: student.grNumber,
-                points: getPointsForStudent(student.grNumber)
-            });
-
+        if (!response.ok) {
+            throw new Error("Leaderboard API failed");
         }
 
-    });
+        const students = await response.json();
 
+        leaderboardList.innerHTML = "";
 
+        if (students.length === 0) {
 
-    students.sort(function(a, b) {
-        return b.points - a.points;
-    });
+            leaderboardList.innerHTML =
+                "<p>No students found.</p>";
 
-
-    leaderboardList.innerHTML = "";
-
-
-    if (students.length === 0) {
-
-        leaderboardList.innerHTML =
-            "<p>No students found.</p>";
-
-        return;
-    }
-
-
-
-    let currentStudent =
-        getCurrentStudent();
-
-
-    students.forEach(function(student, index) {
-
-        let isCurrentStudent =
-            currentStudent &&
-            student.grNumber === currentStudent.grNumber;
-
-
-        let rank = index + 1;
-
-        let rankDisplay = rank;
-
-        if (rank === 1) {
-            rankDisplay = "🥇";
-        } else if (rank === 2) {
-            rankDisplay = "🥈";
-        } else if (rank === 3) {
-            rankDisplay = "🥉";
+            return;
         }
 
+        const currentUser =
+            JSON.parse(localStorage.getItem("loggedInUser"));
 
-        leaderboardList.innerHTML += `
+        const currentStudent =
+            currentUser && currentUser.role === "student"
+                ? currentUser
+                : null;
 
-            <div class="leaderboard-item ${
-                isCurrentStudent ? "you" : ""
-            }">
 
-                <div class="leaderboard-left">
+        students.forEach(function(student, index) {
 
-                    <span class="leaderboard-rank">
-                        ${rankDisplay}
-                    </span>
+            const isCurrentStudent =
+                currentStudent &&
+                student.gr_number === currentStudent.gr_number;
 
-                    <span class="leaderboard-name">
-                        ${student.name}
-                        ${isCurrentStudent ? " (You)" : ""}
+
+            const rank = index + 1;
+
+            let rankDisplay = rank;
+
+            if (rank === 1) {
+                rankDisplay = "🥇";
+            }
+            else if (rank === 2) {
+                rankDisplay = "🥈";
+            }
+            else if (rank === 3) {
+                rankDisplay = "🥉";
+            }
+
+
+            leaderboardList.innerHTML += `
+                <div class="leaderboard-item ${isCurrentStudent ? "you" : ""}">
+
+                    <div class="leaderboard-left">
+
+                        <span class="leaderboard-rank">
+                            ${rankDisplay}
+                        </span>
+
+                        <span class="leaderboard-name">
+                            ${student.name}
+                            ${isCurrentStudent ? " (You)" : ""}
+                        </span>
+
+                    </div>
+
+                    <span class="leaderboard-points">
+                        🏆 ${student.points} pts
                     </span>
 
                 </div>
-
-                <span class="leaderboard-points">
-                    🏆 ${student.points} pts
-                </span>
-
-            </div>
-
-        `;
+            `;
 
 
+            if (isCurrentStudent) {
 
-        if (isCurrentStudent) {
+                const rankElement =
+                    document.getElementById("profileRank");
 
-            const rankElement =
-                document.getElementById("profileRank");
+                if (rankElement) {
+                    rankElement.textContent = "#" + rank;
+                }
 
-            if (rankElement) {
-                rankElement.textContent =
-                    "#" + rank;
             }
 
-        }
+        });
 
-    });
+    }
+    catch (error) {
 
+        console.error(
+            "Leaderboard error:",
+            error
+        );
+
+        leaderboardList.innerHTML =
+            "<p>Unable to load leaderboard.</p>";
+    }
 }
-
 
 
 function getPointsForStudent(grNumber) {

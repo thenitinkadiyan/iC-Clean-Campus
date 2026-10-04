@@ -12,6 +12,7 @@ class User(Base):
     password = Column(String, nullable=False)
     role = Column(String, default="student", nullable=False)
     area = Column(String, nullable=True)
+    points = Column(Integer, default=0, nullable=False)
 
 
 class CleaningTask(Base):
