@@ -61,7 +61,7 @@ async function login() {
 
     } catch (error) {
         console.error(error);
-        alert("Backend se connection nahi ho pa raha.");
+        alert("Backend server is not responding. Please try again later.");
     }
 }
 function registerStudent(){
