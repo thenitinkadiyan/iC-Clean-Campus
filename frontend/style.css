@@ -1516,3 +1516,719 @@ body:has(.profile-page) {
 .achievement-card.locked strong {
     color: #8a9993;
 }
+/* =========================================================
+   iC CLEAN CAMPUS
+   MAIN ADMIN DASHBOARD — PREMIUM UI
+   Works with the current main-admin-dashboard.html
+   ========================================================= */
+
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+#main-admin-dashboard {
+    min-height: 100vh;
+    padding: 32px;
+    background: #f4f8f6;
+    color: #1f3029;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+#main-admin-dashboard .dashboard-header {
+    max-width: 1180px;
+    margin: 0 auto 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce9e3;
+    border-radius: 18px;
+
+    padding: 25px 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    box-shadow: 0 8px 28px #183c2b0d;
+}
+
+
+#main-admin-dashboard .dashboard-header h1 {
+    margin: 0;
+
+    color: #123f2e;
+
+    font-size: 29px;
+    font-weight: 750;
+
+    letter-spacing: -0.6px;
+}
+
+
+#main-admin-dashboard .dashboard-header p {
+    margin: 5px 0 0;
+
+    color: #718078;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+#main-admin-dashboard .dashboard-header button {
+    border: 1px solid #cfe0d8;
+
+    background: #ffffff;
+
+    color: #176044;
+
+    border-radius: 9px;
+
+    padding: 10px 19px;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+#main-admin-dashboard .dashboard-header button:hover {
+    background: #176044;
+
+    color: #ffffff;
+
+    border-color: #176044;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 7px 18px #17604426;
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+#main-admin-dashboard .dashboard-stats {
+    max-width: 1180px;
+
+    margin: 0 auto 28px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+#main-admin-dashboard .stat-card {
+    background: #ffffff;
+
+    border: 1px solid #dce9e3;
+
+    border-radius: 16px;
+
+    padding: 21px;
+
+    min-height: 130px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow: 0 6px 20px #183c2b0b;
+
+    transition: 0.25s ease;
+}
+
+
+#main-admin-dashboard .stat-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background: #176044;
+}
+
+
+#main-admin-dashboard .stat-card:nth-child(2)::before {
+    background: #2563eb;
+}
+
+
+#main-admin-dashboard .stat-card:nth-child(3)::before {
+    background: #d97706;
+}
+
+
+#main-admin-dashboard .stat-card:nth-child(4)::before {
+    background: #dc2626;
+}
+
+
+#main-admin-dashboard .stat-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: 0 13px 30px #183c2b17;
+
+    border-color: #c2d9ce;
+}
+
+
+#main-admin-dashboard .stat-card h3 {
+    margin: 0 0 17px;
+
+    color: #687870;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+#main-admin-dashboard .stat-card strong {
+    display: block;
+
+    color: #173f30;
+
+    font-size: 31px;
+
+    line-height: 1;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   MAIN SECTIONS
+   ========================================================= */
+
+#main-admin-dashboard .main-admin-section {
+    max-width: 1180px;
+
+    margin: 0 auto 28px;
+}
+
+
+#main-admin-dashboard .main-admin-section > h2 {
+    margin: 0 0 14px;
+
+    color: #173f30;
+
+    font-size: 20px;
+
+    font-weight: 750;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   MANAGE USER ACTIONS
+   ========================================================= */
+
+#main-admin-dashboard .admin-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+#main-admin-dashboard .admin-action-card {
+    background: #ffffff;
+
+    border: 1px solid #dce9e3;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    box-shadow: 0 6px 20px #183c2b0b;
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition: 0.25s ease;
+}
+
+
+#main-admin-dashboard .admin-action-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #bcd6c9;
+
+    box-shadow: 0 12px 30px #183c2b14;
+}
+
+
+#main-admin-dashboard .admin-action-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    right: -35px;
+    top: -35px;
+
+    border-radius: 50%;
+
+    background: #e8f5ee;
+}
+
+
+#main-admin-dashboard .admin-action-card h3 {
+    margin: 0 0 7px;
+
+    color: #174e3b;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    position: relative;
+    z-index: 1;
+}
+
+
+#main-admin-dashboard .admin-action-card p {
+    margin: 0 0 19px;
+
+    color: #74827c;
+
+    font-size: 13px;
+
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+#main-admin-dashboard .admin-action-card button {
+    border: none;
+
+    background: #176044;
+
+    color: #ffffff;
+
+    border-radius: 9px;
+
+    padding: 10px 17px;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    position: relative;
+    z-index: 2;
+
+    transition: 0.2s ease;
+}
+
+
+#main-admin-dashboard .admin-action-card button:hover {
+    background: #0f4c37;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 7px 16px #1760442e;
+}
+
+
+/* =========================================================
+   SYSTEM OVERVIEW
+   ========================================================= */
+
+#main-admin-dashboard .overview-box {
+    background: #ffffff;
+
+    border: 1px solid #dce9e3;
+
+    border-radius: 16px;
+
+    padding: 8px 24px;
+
+    box-shadow: 0 6px 20px #183c2b0b;
+}
+
+
+#main-admin-dashboard .overview-box p {
+    margin: 0;
+
+    padding: 16px 0;
+
+    color: #5f6e67;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #edf2ef;
+}
+
+
+#main-admin-dashboard .overview-box p:last-child {
+    border-bottom: none;
+}
+
+
+#main-admin-dashboard .overview-box strong {
+    color: #176044;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MODAL OVERLAY
+   ========================================================= */
+
+#adminModal,
+#staffModal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: #10251bcc;
+
+    backdrop-filter: blur(5px);
+}
+
+
+/*
+   If your JavaScript uses display:flex
+   this keeps the modal centered.
+*/
+
+#adminModal[style*="display: block"],
+#staffModal[style*="display: block"] {
+    display: flex !important;
+}
+
+
+/* =========================================================
+   MODAL BOX
+   ========================================================= */
+
+#adminModal .modal-box,
+#staffModal .modal-box {
+    width: 100%;
+
+    max-width: 450px;
+
+    background: #ffffff;
+
+    border-radius: 19px;
+
+    padding: 28px;
+
+    box-shadow: 0 25px 70px #0000002e;
+
+    border: 1px solid #dce9e3;
+
+    animation: mainAdminModalIn 0.22s ease;
+}
+
+
+@keyframes mainAdminModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   MODAL TITLE
+   ========================================================= */
+
+#adminModal .modal-box h2,
+#staffModal .modal-box h2 {
+    margin: 0 0 22px;
+
+    color: #174e3b;
+
+    font-size: 22px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   MODAL INPUTS
+   ========================================================= */
+
+#adminModal .modal-box input,
+#staffModal .modal-box input {
+    width: 100%;
+
+    display: block;
+
+    margin-bottom: 13px;
+
+    padding: 12px 13px;
+
+    background: #fbfdfc;
+
+    border: 1px solid #cbded5;
+
+    border-radius: 9px;
+
+    color: #26352f;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+#adminModal .modal-box input:focus,
+#staffModal .modal-box input:focus {
+    background: #ffffff;
+
+    border-color: #249267;
+
+    box-shadow: 0 0 0 3px #2492671c;
+}
+
+
+#adminModal .modal-box input::placeholder,
+#staffModal .modal-box input::placeholder {
+    color: #9aa9a2;
+}
+
+
+/* =========================================================
+   MODAL BUTTONS
+   ========================================================= */
+
+#adminModal .modal-box button,
+#staffModal .modal-box button {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 11px 15px;
+
+    margin-top: 3px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+#adminModal .modal-box button:first-of-type,
+#staffModal .modal-box button:first-of-type {
+    background: #176044;
+
+    color: #ffffff;
+
+    margin-bottom: 9px;
+}
+
+
+#adminModal .modal-box button:first-of-type:hover,
+#staffModal .modal-box button:first-of-type:hover {
+    background: #0f4c37;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 7px 16px #1760442e;
+}
+
+
+#adminModal .modal-box button:last-of-type,
+#staffModal .modal-box button:last-of-type {
+    background: #f1f5f3;
+
+    color: #586760;
+
+    border: 1px solid #d6e2dc;
+}
+
+
+#adminModal .modal-box button:last-of-type:hover,
+#staffModal .modal-box button:last-of-type:hover {
+    background: #e5ece8;
+
+    color: #26352f;
+
+    box-shadow: none;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    #main-admin-dashboard {
+        padding: 22px;
+    }
+
+
+    #main-admin-dashboard .dashboard-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    #main-admin-dashboard {
+        padding: 15px;
+    }
+
+
+    #main-admin-dashboard .dashboard-header {
+        padding: 20px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    #main-admin-dashboard .dashboard-header h1 {
+        font-size: 24px;
+    }
+
+
+    #main-admin-dashboard .dashboard-header button {
+        width: 100%;
+    }
+
+
+    #main-admin-dashboard .dashboard-stats {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+
+    #main-admin-dashboard .stat-card {
+        min-height: 110px;
+
+        padding: 19px;
+    }
+
+
+    #main-admin-dashboard .stat-card strong {
+        font-size: 28px;
+    }
+
+
+    #main-admin-dashboard .admin-actions {
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+    }
+
+
+    #main-admin-dashboard .admin-action-card {
+        padding: 20px;
+    }
+
+
+    #main-admin-dashboard .overview-box {
+        padding: 5px 18px;
+    }
+
+
+    #main-admin-dashboard .overview-box p {
+        font-size: 13px;
+
+        padding: 14px 0;
+    }
+}
+
+
+@media (max-width: 400px) {
+
+    #main-admin-dashboard {
+        padding: 10px;
+    }
+
+
+    #main-admin-dashboard .dashboard-header {
+        border-radius: 14px;
+
+        padding: 17px;
+    }
+
+
+    #main-admin-dashboard .dashboard-header h1 {
+        font-size: 21px;
+    }
+
+
+    #main-admin-dashboard .stat-card {
+        border-radius: 13px;
+    }
+
+
+    #main-admin-dashboard .admin-action-card {
+        border-radius: 13px;
+    }
+}
