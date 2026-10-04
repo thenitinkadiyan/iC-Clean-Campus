@@ -7,8 +7,8 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    login_id = Column(String, unique=True, nullable=True, index=True)
-    gr_number = Column(String, unique=True, nullable=False, index=True)
+    login_id = Column(String, unique=True, nullable=False, index=True)
+    gr_number = Column(String, unique=True, nullable=True, index=True)
     password = Column(String, nullable=False)
     role = Column(String, default="student", nullable=False)
     area = Column(String, nullable=True)
