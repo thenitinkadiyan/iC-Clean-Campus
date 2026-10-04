@@ -1516,16 +1516,6 @@ body:has(.profile-page) {
 .achievement-card.locked strong {
     color: #8a9993;
 }
-/* =========================================================
-   iC CLEAN CAMPUS
-   MAIN ADMIN DASHBOARD — PREMIUM UI
-   Works with the current main-admin-dashboard.html
-   ========================================================= */
-
-
-/* =========================================================
-   MAIN PAGE
-   ========================================================= */
 
 #main-admin-dashboard {
     min-height: 100vh;
@@ -1535,10 +1525,6 @@ body:has(.profile-page) {
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
-
-/* =========================================================
-   HEADER
-   ========================================================= */
 
 #main-admin-dashboard .dashboard-header {
     max-width: 1180px;
@@ -1581,9 +1567,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   LOGOUT
-   ========================================================= */
 
 #main-admin-dashboard .dashboard-header button {
     border: 1px solid #cfe0d8;
@@ -1618,9 +1601,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   STATISTICS
-   ========================================================= */
 
 #main-admin-dashboard .dashboard-stats {
     max-width: 1180px;
@@ -1720,10 +1700,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   MAIN SECTIONS
-   ========================================================= */
-
 #main-admin-dashboard .main-admin-section {
     max-width: 1180px;
 
@@ -1743,10 +1719,6 @@ body:has(.profile-page) {
     letter-spacing: -0.2px;
 }
 
-
-/* =========================================================
-   MANAGE USER ACTIONS
-   ========================================================= */
 
 #main-admin-dashboard .admin-actions {
     display: grid;
@@ -1829,9 +1801,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   ACTION BUTTONS
-   ========================================================= */
 
 #main-admin-dashboard .admin-action-card button {
     border: none;
@@ -1866,9 +1835,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   SYSTEM OVERVIEW
-   ========================================================= */
 
 #main-admin-dashboard .overview-box {
     background: #ffffff;
@@ -1908,10 +1874,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   MODAL OVERLAY
-   ========================================================= */
-
 #adminModal,
 #staffModal {
     position: fixed;
@@ -1933,10 +1895,6 @@ body:has(.profile-page) {
 }
 
 
-/*
-   If your JavaScript uses display:flex
-   this keeps the modal centered.
-*/
 
 #adminModal[style*="display: block"],
 #staffModal[style*="display: block"] {
@@ -1944,9 +1902,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   MODAL BOX
-   ========================================================= */
 
 #adminModal .modal-box,
 #staffModal .modal-box {
@@ -1982,9 +1937,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   MODAL TITLE
-   ========================================================= */
 
 #adminModal .modal-box h2,
 #staffModal .modal-box h2 {
@@ -1998,9 +1950,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   MODAL INPUTS
-   ========================================================= */
 
 #adminModal .modal-box input,
 #staffModal .modal-box input {
@@ -2046,9 +1995,6 @@ body:has(.profile-page) {
 }
 
 
-/* =========================================================
-   MODAL BUTTONS
-   ========================================================= */
 
 #adminModal .modal-box button,
 #staffModal .modal-box button {
@@ -2115,10 +2061,6 @@ body:has(.profile-page) {
     transform: none;
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
 @media (max-width: 900px) {
 

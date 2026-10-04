@@ -22,208 +22,77 @@ async function login() {
     }
 
     try {
-        const formData = new URLSearchParams();
-
-        formData.append("login_id", loginId);
-        formData.append("password", password);
-
         const response = await fetch(
             "https://ic-clean-campus.onrender.com/login",
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
+                    "Content-Type": "application/json"
                 },
-                body: formData
+                body: JSON.stringify({
+                    login_id: loginId,
+                    password: password
+                })
             }
         );
 
         const data = await response.json();
 
-        console.log("Login response:", data);
-
-        if (!response.ok || data.message !== "Login successful") {
-            alert(data.message || "Invalid ID or Password");
+        if (!response.ok) {
+            alert(data.detail || "Invalid ID or Password");
             return;
         }
+
+        // Save authenticated session
+        localStorage.setItem(
+            "accessToken",
+            data.access_token
+        );
 
         localStorage.setItem(
             "loggedInUser",
             JSON.stringify(data)
         );
 
-        if (data.role === "main_admin") {
-
-            window.location.href =
-                "main-admin-dashboard.html";
-
-        } else if (data.role === "admin") {
-
-            window.location.href =
-                "admin-dashboard.html";
-
-        } else if (data.role === "staff") {
-
-            window.location.href =
-                "staff-dashboard.html";
-
-        } else if (data.role === "student") {
-
+        // Student information
+        if (data.role === "student") {
             localStorage.setItem(
                 "loggedInStudent",
                 JSON.stringify({
+                    id: data.user_id,
                     name: data.name,
-                    grNumber: data.gr_number
+                    grNumber: data.gr_number,
+                    loginId: data.login_id,
+                    role: data.role
                 })
             );
 
-            window.location.href =
-                "student-dashboard.html";
+            window.location.href = "student-dashboard.html";
+        }
 
-        } else {
+        // Staff
+        else if (data.role === "staff") {
+            window.location.href = "staff-dashboard.html";
+        }
 
-            alert("Unknown user role: " + data.role);
+        // Area Admin
+        else if (data.role === "admin") {
+            window.location.href = "admin-dashboard.html";
+        }
+
+        // Main Admin
+        else if (data.role === "main_admin") {
+            window.location.href = "main-admin-dashboard.html";
+        }
+
+        else {
+            alert("Unknown user role.");
         }
 
     } catch (error) {
-
         console.error("Login error:", error);
-
-        alert(
-            "Backend server is not responding. Please try again later."
-        );
+        alert("Server connection failed. Please try again later.");
     }
-}
-function registerStudent(){
-        const name= document.getElementById("studentName").value;
-        const grNumber= document.getElementById("studentGR").value;
-        const password= document.getElementById("studentPassword").value;
-        const confirmPassword= document.getElementById("confirmPassword").value;
-        if(name===""||grNumber===""||password===""||confirmPassword===""){
-            alert("ERROR: Please fill all Fields");
-            return;
-        }
-        if(password !==confirmPassword){
-            alert("ERROR:Passwords do not match");
-            return;
-        }
-   fetch("https://ic-clean-campus.onrender.com/register?name=" + encodeURIComponent(name) + "&gr_number=" + encodeURIComponent(grNumber) + "&password=" + encodeURIComponent(password), {
-    method: "POST"
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error("Registration failed");
-    }
-    return response.json();
-})
-.then(data => {
-    alert("Registration Successful!");
-    window.location.href = "login.html";
-})
-.catch(error => {
-    console.error(error);
-    alert("Registration failed. Please try again.");
-});
-    
-    window.location.href="login.html";
-}
-let map;
-let marker;
-
-function initMap() {
-    map = L.map('map').setView([30.7046, 76.7179], 15);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-setTimeout(function(){
-    map.invalidateSize();
-},300);
-    map.on('click', function(e) {
-        setLocation(e.latlng.lat, e.latlng.lng);
-    });
-}
-
-function setLocation(lat, lng) {
-
-    if (marker) {
-        map.removeLayer(marker);
-    }
-
-    marker = L.marker([lat, lng]).addTo(map);
-
-    document.getElementById("locationText").value =
-        lat.toFixed(6) + ", " + lng.toFixed(6);
-}
-
-function getCurrentLocation() {
-
-    if (!navigator.geolocation) {
-        alert("Location is not supported by this browser.");
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            map.setView([lat, lng], 17);
-            setLocation(lat, lng);
-        },
-        function() {
-            alert("Unable to get your current location.");
-        }
-    );
-}
-function submitReport() {
-
-    const photo = document.getElementById("garbagePhoto").files[0];
-    const problem = document.getElementById("problem").value;
-    const location = document.getElementById("locationText").value;
-
-    if (!photo || problem === "" || location === "") {
-        alert("ERROR: Please fill all details");
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-
-        let reports = JSON.parse(localStorage.getItem("report")) || [];
-
-       reports.push({
-    id: Date.now(),
-
-    studentGR: JSON.parse(
-        localStorage.getItem("loggedInStudent")
-    ).grNumber,
-
-    problem: problem,
-    location: location,
-    photo: event.target.result,
-    status: "In Progress",
-    assignedStaff: "Staff 02",
-    date: new Date().toLocaleString()
-});
-
-        localStorage.setItem("report", JSON.stringify(reports));
-
-        alert(
-            "Report Submitted Successfully!\n\n" +
-            "Staff 02 has been assigned automatically."
-        );
-
-        window.location.href = "student-dashboard.html";
-    };
-
-    reader.readAsDataURL(photo);
-}
-function updateReportCount(){
-    let report= JSON.parse(localStorage.getItem("report"))||[];
-    document.getElementById("reportCount").textContent=report.Length;
 }
 if(document.getElementById("reportCount")){
     updateReportCount();
