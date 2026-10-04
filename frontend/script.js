@@ -90,7 +90,7 @@ async function login() {
         console.error("Login error:", error);
 
         alert(
-            "Backend se connection nahi ho pa raha."
+            "Backend server is not responding. Please try again later."
         );
     }
 }
