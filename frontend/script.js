@@ -1380,7 +1380,7 @@ async function addAdmin() {
 
     try {
         const response = await fetch(
-            `http://127.0.0.1:8001/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=admin&area=${encodeURIComponent(area)}`,
+            `https://ic-clean-campus.onrender.com/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=admin&area=${encodeURIComponent(area)}`,
             { method: "POST" }
         );
 
@@ -1419,7 +1419,7 @@ async function addStaff() {
 
     try {
         const response = await fetch(
-            `http://127.0.0.1:8001/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=staff&area=${encodeURIComponent(area)}`,
+            `https://ic-clean-campus.onrender.com/main-admin/add-user?name=${encodeURIComponent(name)}&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}&role=staff&area=${encodeURIComponent(area)}`,
             { method: "POST" }
         );
 
