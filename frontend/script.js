@@ -1473,30 +1473,51 @@ document.addEventListener("DOMContentLoaded", function () {
         staffGreetingName.textContent = user.name || "Staff";
     }
 
-});
-let mainAdminOverview = null;
+});let mainAdminOverview = null;
+
+
+function getAccessToken() {
+
+    let token =
+        localStorage.getItem("accessToken");
+
+    if (token) {
+        return token;
+    }
+
+    const loggedInUser =
+        JSON.parse(
+            localStorage.getItem("loggedInUser")
+        );
+
+    if (
+        loggedInUser &&
+        loggedInUser.access_token
+    ) {
+        return loggedInUser.access_token;
+    }
+
+    return null;
+}
 
 
 async function loadMainAdminOverview() {
 
-    const accessToken =
-        localStorage.getItem("accessToken");
+    const token = getAccessToken();
 
-    if (!accessToken) {
-        alert("Session expired. Please login again.");
-        window.location.href = "login.html";
+    if (!token) {
+        console.error("Main Admin token not found.");
         return;
     }
 
     try {
 
         const response = await fetch(
-            "https://ic-clean-campus.onrender.com/main-admin/overview",
+            "https://ic-clean-campus.onrender.com/main-admin/full-overview",
             {
                 method: "GET",
-
                 headers: {
-                    "Authorization": `Bearer ${accessToken}`
+                    "Authorization": `Bearer ${token}`
                 }
             }
         );
@@ -1505,9 +1526,9 @@ async function loadMainAdminOverview() {
 
         if (!response.ok) {
 
-            alert(
-                data.detail ||
-                "Unable to load dashboard data."
+            console.error(
+                "Overview error:",
+                data
             );
 
             return;
@@ -1515,33 +1536,361 @@ async function loadMainAdminOverview() {
 
         mainAdminOverview = data;
 
+
         document.getElementById(
             "totalStudents"
-        ).textContent = data.counts.students;
+        ).textContent =
+            data.counts.students;
+
 
         document.getElementById(
             "totalAdmins"
-        ).textContent = data.counts.admins;
+        ).textContent =
+            data.counts.admins;
+
 
         document.getElementById(
             "totalStaff"
-        ).textContent = data.counts.staff;
+        ).textContent =
+            data.counts.staff;
+
 
         document.getElementById(
             "totalReports"
-        ).textContent = data.counts.reports;
+        ).textContent =
+            data.counts.reports;
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Main Admin overview error:",
             error
         );
 
-        alert(
-            "Unable to connect to backend."
-        );
     }
+}
+
+
+function openUserList(type) {
+
+    if (!mainAdminOverview) {
+        return;
+    }
+
+    const modal =
+        document.getElementById(
+            "userListModal"
+        );
+
+    const title =
+        document.getElementById(
+            "userListTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "userListSubtitle"
+        );
+
+    const content =
+        document.getElementById(
+            "userListContent"
+        );
+
+
+    let users = [];
+
+
+    if (type === "students") {
+
+        users =
+            mainAdminOverview.students;
+
+        title.textContent =
+            "All Students";
+
+    }
+
+
+    if (type === "admins") {
+
+        users =
+            mainAdminOverview.admins;
+
+        title.textContent =
+            "All Admins";
+
+    }
+
+
+    if (type === "staff") {
+
+        users =
+            mainAdminOverview.staff;
+
+        title.textContent =
+            "All Staff";
+
+    }
+
+
+    subtitle.textContent =
+        `${users.length} users found`;
+
+
+    if (users.length === 0) {
+
+        content.innerHTML = `
+            <div class="empty-user-list">
+                <h3>No users found</h3>
+                <p>No users are currently registered.</p>
+            </div>
+        `;
+
+        modal.style.display = "flex";
+
+        return;
+    }
+
+
+    content.innerHTML =
+        users.map(function(user) {
+
+            return `
+                <div class="user-detail-card">
+
+                    <div class="user-detail-main">
+
+                        <div class="user-avatar">
+                            ${escapeHTML(
+                                user.name
+                                    .charAt(0)
+                                    .toUpperCase()
+                            )}
+                        </div>
+
+                        <div class="user-detail-info">
+
+                            <h3>
+                                ${escapeHTML(user.name)}
+                            </h3>
+
+                            <p>
+                                <strong>Login ID:</strong>
+                                ${escapeHTML(user.login_id)}
+                            </p>
+
+                            ${
+                                user.gr_number
+                                ? `
+                                <p>
+                                    <strong>GR Number:</strong>
+                                    ${escapeHTML(
+                                        user.gr_number
+                                    )}
+                                </p>
+                                `
+                                : ""
+                            }
+
+                            <p>
+                                <strong>Role:</strong>
+                                ${escapeHTML(user.role)}
+                            </p>
+
+                            ${
+                                user.area
+                                ? `
+                                <p>
+                                    <strong>Area:</strong>
+                                    ${escapeHTML(
+                                        user.area
+                                    )}
+                                </p>
+                                `
+                                : ""
+                            }
+
+                            <p>
+                                <strong>Password:</strong>
+                                <span class="hidden-password">
+                                    ••••••••
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="reset-password-button"
+                        onclick="resetUserPassword(
+                            ${user.id},
+                            '${escapeJS(user.name)}'
+                        )"
+                    >
+                        Reset Password
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+
+    modal.style.display = "flex";
+}
+
+
+function openReportList() {
+
+    if (!mainAdminOverview) {
+        return;
+    }
+
+    const modal =
+        document.getElementById(
+            "userListModal"
+        );
+
+    const title =
+        document.getElementById(
+            "userListTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "userListSubtitle"
+        );
+
+    const content =
+        document.getElementById(
+            "userListContent"
+        );
+
+
+    const reports =
+        mainAdminOverview.reports;
+
+
+    title.textContent =
+        "All Reports";
+
+
+    subtitle.textContent =
+        `${reports.length} reports found`;
+
+
+    if (reports.length === 0) {
+
+        content.innerHTML = `
+            <div class="empty-user-list">
+                <h3>No Reports</h3>
+                <p>No cleanliness reports have been submitted.</p>
+            </div>
+        `;
+
+        modal.style.display = "flex";
+
+        return;
+    }
+
+
+    content.innerHTML =
+        reports.map(function(report) {
+
+            return `
+                <div class="user-detail-card">
+
+                    <div class="user-detail-info">
+
+                        <h3>
+                            Report #${report.id}
+                        </h3>
+
+                        <p>
+                            <strong>Problem:</strong>
+                            ${escapeHTML(
+                                report.problem
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            ${escapeHTML(
+                                report.location
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Description:</strong>
+                            ${escapeHTML(
+                                report.description || "—"
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Area:</strong>
+                            ${escapeHTML(
+                                report.area || "—"
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Student ID:</strong>
+                            ${report.student_id}
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong>
+                            ${escapeHTML(
+                                report.status
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Assigned Staff:</strong>
+                            ${
+                                report.assigned_staff_id ||
+                                "Not assigned"
+                            }
+                        </p>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+
+    modal.style.display = "flex";
+}
+
+
+function closeUserList() {
+
+    const modal =
+        document.getElementById(
+            "userListModal"
+        );
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+if (
+    document.getElementById(
+        "main-admin-dashboard"
+    )
+) {
+
+    loadMainAdminOverview();
+
 }
 
 

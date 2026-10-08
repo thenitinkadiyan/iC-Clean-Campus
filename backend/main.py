@@ -827,3 +827,81 @@ def reset_user_password(
         "message": "Password reset successfully",
         "user_id": user.id
     }
+@app.get("/main-admin/full-overview")
+def get_main_admin_full_overview(
+    current_user=Depends(require_main_admin),
+    db: Session = Depends(get_db)
+):
+    students = db.query(User).filter(
+        User.role == "student"
+    ).order_by(User.id.desc()).all()
+
+    admins = db.query(User).filter(
+        User.role == "admin"
+    ).order_by(User.id.desc()).all()
+
+    staff_members = db.query(User).filter(
+        User.role == "staff"
+    ).order_by(User.id.desc()).all()
+
+    reports = db.query(Report).order_by(
+        Report.id.desc()
+    ).all()
+
+    return {
+        "counts": {
+            "students": len(students),
+            "admins": len(admins),
+            "staff": len(staff_members),
+            "reports": len(reports)
+        },
+
+        "students": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "login_id": user.login_id,
+                "gr_number": user.gr_number,
+                "role": user.role,
+                "area": user.area
+            }
+            for user in students
+        ],
+
+        "admins": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "login_id": user.login_id,
+                "role": user.role,
+                "area": user.area
+            }
+            for user in admins
+        ],
+
+        "staff": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "login_id": user.login_id,
+                "role": user.role,
+                "area": user.area
+            }
+            for user in staff_members
+        ],
+
+        "reports": [
+            {
+                "id": report.id,
+                "student_id": report.student_id,
+                "problem": report.problem,
+                "location": report.location,
+                "description": report.description,
+                "area": report.area,
+                "status": report.status,
+                "assigned_staff_id": report.assigned_staff_id,
+                "pending_reason": report.pending_reason
+            }
+            for report in reports
+        ]
+    }
