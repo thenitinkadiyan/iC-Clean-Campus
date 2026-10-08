@@ -43,7 +43,6 @@ async function login() {
             return;
         }
 
-        // Save authenticated session
         localStorage.setItem(
             "accessToken",
             data.access_token
@@ -54,7 +53,6 @@ async function login() {
             JSON.stringify(data)
         );
 
-        // Student information
         if (data.role === "student") {
             localStorage.setItem(
                 "loggedInStudent",
@@ -70,17 +68,15 @@ async function login() {
             window.location.href = "student-dashboard.html";
         }
 
-        // Staff
         else if (data.role === "staff") {
             window.location.href = "staff-dashboard.html";
         }
 
-        // Area Admin
+        
         else if (data.role === "admin") {
             window.location.href = "admin-dashboard.html";
         }
 
-        // Main Admin
         else if (data.role === "main_admin") {
             window.location.href = "main-admin-dashboard.html";
         }
@@ -92,6 +88,64 @@ async function login() {
     } catch (error) {
         console.error("Login error:", error);
         alert("Server connection failed. Please try again later.");
+    }
+}
+async function registerStudent() {
+    const name = document.getElementById("studentName").value.trim();
+    const grNumber = document.getElementById("studentGR").value.trim();
+    const password = document.getElementById("studentPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (!name || !grNumber || !password || !confirmPassword) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    if (password.length < 6) {
+        alert("Password must contain at least 6 characters");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "https://ic-clean-campus.onrender.com/register",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    gr_number: grNumber,
+                    password: password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.detail || "Registration failed");
+            return;
+        }
+
+        alert("Registration successful! You can now login.");
+
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentGR").value = "";
+        document.getElementById("studentPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+
+        window.location.href = "login.html";
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        alert("Backend se connection nahi ho pa raha.");
     }
 }
 if(document.getElementById("reportCount")){
