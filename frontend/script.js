@@ -1441,39 +1441,159 @@ async function addStaff() {
         alert("Backend connection failed");
     }
 }
-document.addEventListener("DOMContentLoaded", function () {
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+async function loadLoggedInUserProfile() {
 
-    if (!user) {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+        window.location.href = "login.html";
         return;
     }
 
-    const adminName = document.getElementById("adminName");
-    const adminLoginId = document.getElementById("adminLoginId");
-    const adminArea = document.getElementById("adminArea");
+    try {
 
-    if (adminName) {
-        adminName.textContent = user.name || "Admin";
-        adminLoginId.textContent = user.login_id || "-";
-        adminArea.textContent = user.area || "-";
+        const response = await fetch(
+            "https://ic-clean-campus.onrender.com/me",
+            {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            console.error("Profile API error:", data);
+
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("loggedInUser");
+
+            window.location.href = "login.html";
+
+            return;
+        }
+
+        /*
+         * ADMIN PROFILE
+         */
+
+        const adminName =
+            document.getElementById("adminName");
+
+        const adminLoginId =
+            document.getElementById("adminLoginId");
+
+        const adminArea =
+            document.getElementById("adminArea");
+
+
+        if (adminName) {
+            adminName.textContent =
+                data.name || "Admin";
+        }
+
+        if (adminLoginId) {
+            adminLoginId.textContent =
+                data.login_id || "-";
+        }
+
+        if (adminArea) {
+            adminArea.textContent =
+                data.area || "Not Assigned";
+        }
+
+
+        /*
+         * STAFF PROFILE
+         */
+
+        const staffName =
+            document.getElementById("staffName");
+
+        const staffLoginId =
+            document.getElementById("staffLoginId");
+
+        const staffArea =
+            document.getElementById("staffArea");
+
+
+        if (staffName) {
+            staffName.textContent =
+                data.name || "Staff";
+        }
+
+        if (staffLoginId) {
+            staffLoginId.textContent =
+                data.login_id || "-";
+        }
+
+        if (staffArea) {
+            staffArea.textContent =
+                data.area || "Not Assigned";
+        }
+
+
+        /*
+         * STAFF GREETING
+         */
+
+        const staffGreetingName =
+            document.getElementById("staffGreetingName");
+
+        if (staffGreetingName) {
+            staffGreetingName.textContent =
+                data.name || "Staff";
+        }
+
+
+        /*
+         * Keep current login information
+         * synchronized with backend data.
+         */
+
+        localStorage.setItem(
+            "loggedInUser",
+            JSON.stringify({
+                ...data
+            })
+        );
+
     }
 
-    const staffName = document.getElementById("staffName");
-    const staffLoginId = document.getElementById("staffLoginId");
-    const staffArea = document.getElementById("staffArea");
+    catch (error) {
 
-    if (staffName) {
-        staffName.textContent = user.name || "Staff";
-        staffLoginId.textContent = user.login_id || "-";
-        staffArea.textContent = user.area || "-";
+        console.error(
+            "User profile loading error:",
+            error
+        );
+
+        alert(
+            "Unable to load your profile. Please try again."
+        );
     }
+}
 
-    const staffGreetingName = document.getElementById("staffGreetingName");
-    if (staffGreetingName) {
-        staffGreetingName.textContent = user.name || "Staff";
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (
+            document.getElementById("adminName") ||
+            document.getElementById("staffName") ||
+            document.getElementById("staffGreetingName")
+        ) {
+
+            loadLoggedInUserProfile();
+
+        }
+
     }
-
-});let mainAdminOverview = null;
+);
+let mainAdminOverview = null;
 
 
 function getAccessToken() {
