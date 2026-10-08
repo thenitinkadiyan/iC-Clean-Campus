@@ -204,6 +204,22 @@ def require_main_admin(
 
     return current_user
 
+def get_user_role(current_user):
+    if isinstance(current_user, dict):
+        return current_user["role"]
+    return current_user.role
+
+
+def get_user_id(current_user):
+    if isinstance(current_user, dict):
+        return current_user["id"]
+    return current_user.id
+
+
+def get_user_area(current_user):
+    if isinstance(current_user, dict):
+        return current_user.get("area")
+    return current_user.area
 
 @app.get("/")
 def home():
@@ -436,17 +452,33 @@ def get_staff(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    if current_user["role"] if isinstance(current_user, dict) else current_user.role not in [
-        "main_admin",
-        "admin"
-    ]:
+    role = get_user_role(current_user)
+
+    if role not in ["main_admin", "admin"]:
         raise HTTPException(
             status_code=403,
             detail="Admin access required."
         )
 
-    staff_members = db.query(User).filter(
+    query = db.query(User).filter(
         User.role == "staff"
+    )
+
+    if role == "admin":
+        admin_area = get_user_area(current_user)
+
+        if not admin_area:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin area is not configured."
+            )
+
+        query = query.filter(
+            User.area == admin_area
+        )
+
+    staff_members = query.order_by(
+        User.id.desc()
     ).all()
 
     return [
@@ -483,7 +515,26 @@ def create_cleaning_task(
         User.id == request.staff_id,
         User.role == "staff"
     ).first()
+        if role == "admin":
+        admin_area = get_user_area(current_user)
 
+        if not admin_area:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin area is not configured."
+            )
+
+        if staff.area != admin_area:
+            raise HTTPException(
+                status_code=403,
+                detail="You can only assign tasks to staff from your area."
+            )
+
+        if request.area.strip() != admin_area:
+            raise HTTPException(
+                status_code=403,
+                detail="You can only create tasks for your assigned area."
+            )
     if not staff:
         raise HTTPException(
             status_code=404,
@@ -633,8 +684,31 @@ def get_reports(
         reports_query = reports_query.filter(
             Report.student_id == student_id
         )
+    elif role == "admin":
+        admin_area = get_user_area(current_user)
 
-    elif role not in ["main_admin", "admin", "staff"]:
+        if not admin_area:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin area is not configured."
+            )
+
+        reports_query = reports_query.filter(
+            Report.area == admin_area
+        )
+
+    elif role == "staff":
+        current_staff_id = get_user_id(current_user)
+
+        reports_query = reports_query.filter(
+            Report.assigned_staff_id == current_staff_id
+        )
+
+    elif role != "main_admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Access denied."
+        )
         raise HTTPException(
             status_code=403,
             detail="Access denied."
@@ -666,11 +740,7 @@ def get_admin_stats(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    role = (
-        current_user["role"]
-        if isinstance(current_user, dict)
-        else current_user.role
-    )
+    role = get_user_role(current_user)
 
     if role not in ["main_admin", "admin"]:
         raise HTTPException(
@@ -678,9 +748,23 @@ def get_admin_stats(
             detail="Admin access required."
         )
 
-    total_reports = db.query(Report).count()
+    query = db.query(Report)
+    if role == "admin":
+        admin_area = get_user_area(current_user)
 
-    in_progress = db.query(Report).filter(
+        if not admin_area:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin area is not configured."
+            )
+
+        query = query.filter(
+            Report.area == admin_area
+        )
+
+    total_reports = query.count()
+
+    in_progress = query.filter(
         Report.status.in_([
             "assigned",
             "cleaning",
@@ -688,14 +772,24 @@ def get_admin_stats(
         ])
     ).count()
 
-    resolved = db.query(Report).filter(
+    resolved = query.filter(
         Report.status == "resolved"
+    ).count()
+
+    pending = query.filter(
+        Report.status.notin_([
+            "resolved",
+            "assigned",
+            "cleaning",
+            "in_progress"
+        ])
     ).count()
 
     return {
         "total_reports": total_reports,
         "in_progress": in_progress,
-        "resolved": resolved
+        "resolved": resolved,
+        "pending": pending
     }
 
 
