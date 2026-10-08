@@ -22,30 +22,45 @@
     </header>
 
 
-    <section class="dashboard-stats">
+   <section class="dashboard-stats">
 
-        <div class="stat-card">
-            <h3>Total Students</h3>
-            <strong id="totalStudents">0</strong>
-        </div>
+    <div
+        class="stat-card clickable-stat"
+        onclick="openUserList('students')"
+    >
+        <h3>Total Students</h3>
+        <strong id="totalStudents">0</strong>
+        <span>View Students →</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Total Admins</h3>
-            <strong id="totalAdmins">0</strong>
-        </div>
+    <div
+        class="stat-card clickable-stat"
+        onclick="openUserList('admins')"
+    >
+        <h3>Total Admins</h3>
+        <strong id="totalAdmins">0</strong>
+        <span>View Admins →</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Total Staff</h3>
-            <strong id="totalStaff">0</strong>
-        </div>
+    <div
+        class="stat-card clickable-stat"
+        onclick="openUserList('staff')"
+    >
+        <h3>Total Staff</h3>
+        <strong id="totalStaff">0</strong>
+        <span>View Staff →</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Total Reports</h3>
-            <strong id="totalReports">0</strong>
-        </div>
+    <div
+        class="stat-card clickable-stat"
+        onclick="openReportList()"
+    >
+        <h3>Total Reports</h3>
+        <strong id="totalReports">0</strong>
+        <span>View Reports →</span>
+    </div>
 
-    </section>
-
+</section>
 
     <section class="main-admin-section">
 
@@ -196,6 +211,35 @@
 
 </div>
 
+<div id="userListModal" class="user-list-modal">
+
+    <div class="user-list-modal-box">
+
+        <div class="user-list-header">
+
+            <div>
+                <h2 id="userListTitle">Users</h2>
+                <p id="userListSubtitle">
+                    Live data from iC Clean Campus database
+                </p>
+            </div>
+
+            <button
+                class="modal-close-button"
+                onclick="closeUserList()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="userListContent" class="user-list-content">
+            Loading...
+        </div>
+
+    </div>
+
+</div>
 
 <script src="script.js"></script>
 

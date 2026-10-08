@@ -1474,3 +1474,355 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+let mainAdminOverview = null;
+
+
+async function loadMainAdminOverview() {
+
+    const accessToken =
+        localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+        alert("Session expired. Please login again.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "https://ic-clean-campus.onrender.com/main-admin/overview",
+            {
+                method: "GET",
+
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            alert(
+                data.detail ||
+                "Unable to load dashboard data."
+            );
+
+            return;
+        }
+
+        mainAdminOverview = data;
+
+        document.getElementById(
+            "totalStudents"
+        ).textContent = data.counts.students;
+
+        document.getElementById(
+            "totalAdmins"
+        ).textContent = data.counts.admins;
+
+        document.getElementById(
+            "totalStaff"
+        ).textContent = data.counts.staff;
+
+        document.getElementById(
+            "totalReports"
+        ).textContent = data.counts.reports;
+
+    } catch (error) {
+
+        console.error(
+            "Main Admin overview error:",
+            error
+        );
+
+        alert(
+            "Unable to connect to backend."
+        );
+    }
+}
+
+
+function openUserList(type) {
+
+    if (!mainAdminOverview) {
+        alert("Dashboard data is still loading.");
+        return;
+    }
+
+    const modal =
+        document.getElementById("userListModal");
+
+    const title =
+        document.getElementById("userListTitle");
+
+    const subtitle =
+        document.getElementById("userListSubtitle");
+
+    const content =
+        document.getElementById("userListContent");
+
+
+    let users = [];
+
+    if (type === "students") {
+
+        users = mainAdminOverview.students;
+
+        title.textContent = "All Students";
+
+        subtitle.textContent =
+            `${users.length} students registered in the system`;
+
+    }
+
+    else if (type === "admins") {
+
+        users = mainAdminOverview.admins;
+
+        title.textContent = "All Admins";
+
+        subtitle.textContent =
+            `${users.length} area admins registered in the system`;
+
+    }
+
+    else if (type === "staff") {
+
+        users = mainAdminOverview.staff;
+
+        title.textContent = "All Staff";
+
+        subtitle.textContent =
+            `${users.length} staff members registered in the system`;
+
+    }
+
+
+    if (users.length === 0) {
+
+        content.innerHTML = `
+            <div class="empty-user-list">
+                <h3>No users found</h3>
+                <p>There are currently no users in this category.</p>
+            </div>
+        `;
+
+        modal.style.display = "flex";
+
+        return;
+    }
+
+
+    content.innerHTML = users.map(function(user) {
+
+        const grHTML =
+            user.gr_number
+                ? `<p><strong>GR Number:</strong> ${escapeHTML(user.gr_number)}</p>`
+                : "";
+
+        const areaHTML =
+            user.area
+                ? `<p><strong>Area:</strong> ${escapeHTML(user.area)}</p>`
+                : "";
+
+        return `
+            <div class="user-detail-card">
+
+                <div class="user-detail-main">
+
+                    <div class="user-avatar">
+                        ${escapeHTML(
+                            user.name
+                                .charAt(0)
+                                .toUpperCase()
+                        )}
+                    </div>
+
+                    <div class="user-detail-info">
+
+                        <h3>
+                            ${escapeHTML(user.name)}
+                        </h3>
+
+                        <p>
+                            <strong>Login ID:</strong>
+                            ${escapeHTML(user.login_id)}
+                        </p>
+
+                        ${grHTML}
+
+                        <p>
+                            <strong>Role:</strong>
+                            ${escapeHTML(user.role)}
+                        </p>
+
+                        ${areaHTML}
+
+                        <p>
+                            <strong>Password:</strong>
+                            <span class="hidden-password">
+                                ••••••••
+                            </span>
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="reset-password-button"
+                    onclick="resetUserPassword(${user.id}, '${escapeJS(user.name)}')"
+                >
+                    Reset Password
+                </button>
+
+            </div>
+        `;
+
+    }).join("");
+
+    modal.style.display = "flex";
+}
+
+
+function closeUserList() {
+
+    const modal =
+        document.getElementById("userListModal");
+
+    modal.style.display = "none";
+}
+
+
+async function resetUserPassword(userId, userName) {
+
+    const newPassword = prompt(
+        `Enter a new password for ${userName}:`
+    );
+
+    if (newPassword === null) {
+        return;
+    }
+
+    if (newPassword.length < 6) {
+
+        alert(
+            "Password must contain at least 6 characters."
+        );
+
+        return;
+    }
+
+    const accessToken =
+        localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+
+        alert(
+            "Session expired. Please login again."
+        );
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+
+            `https://ic-clean-campus.onrender.com/main-admin/users/${userId}/reset-password`,
+
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                },
+
+                body: JSON.stringify({
+                    new_password: newPassword
+                })
+            }
+
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.detail ||
+                "Password reset failed."
+            );
+
+            return;
+        }
+
+
+        alert(
+            "Password reset successfully."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Password reset error:",
+            error
+        );
+
+        alert(
+            "Backend connection failed."
+        );
+    }
+}
+
+
+function openReportList() {
+
+    alert(
+        "Report management will be connected to the live reports system next."
+    );
+}
+
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function escapeJS(value) {
+
+    return String(value)
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'")
+        .replaceAll("\n", "\\n")
+        .replaceAll("\r", "\\r");
+}
+
+
+if (
+    document.getElementById(
+        "main-admin-dashboard"
+    )
+) {
+
+    loadMainAdminOverview();
+
+}

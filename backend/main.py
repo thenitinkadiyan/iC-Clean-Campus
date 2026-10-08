@@ -14,16 +14,9 @@ import os
 from datetime import datetime, timedelta, timezone
 
 
-# =========================================================
-# DATABASE
-# =========================================================
 
 Base.metadata.create_all(bind=engine)
 
-
-# =========================================================
-# ENVIRONMENT
-# =========================================================
 
 load_dotenv()
 
@@ -41,19 +34,12 @@ if not JWT_SECRET:
     raise RuntimeError("JWT_SECRET is not configured")
 
 
-# =========================================================
-# APP
-# =========================================================
 
 app = FastAPI(
     title="iC Clean Campus API",
     version="1.0.0"
 )
 
-
-# =========================================================
-# CORS
-# =========================================================
 
 app.add_middleware(
     CORSMiddleware,
@@ -66,9 +52,6 @@ app.add_middleware(
 )
 
 
-# =========================================================
-# SECURITY
-# =========================================================
 
 password_hash = PasswordHash.recommended()
 
@@ -78,9 +61,6 @@ JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_MINUTES = 60 * 24
 
 
-# =========================================================
-# DATABASE DEPENDENCY
-# =========================================================
 
 def get_db():
     db = SessionLocal()
@@ -90,10 +70,6 @@ def get_db():
     finally:
         db.close()
 
-
-# =========================================================
-# REQUEST MODELS
-# =========================================================
 
 class RegisterRequest(BaseModel):
     name: str
@@ -131,10 +107,10 @@ class ReportRequest(BaseModel):
     photo: str = ""
     area: str = ""
 
+class ResetPasswordRequest(BaseModel):
+    new_password: str
 
-# =========================================================
-# JWT FUNCTIONS
-# =========================================================
+
 
 def create_access_token(
     user_id: int,
@@ -229,10 +205,6 @@ def require_main_admin(
     return current_user
 
 
-# =========================================================
-# HOME
-# =========================================================
-
 @app.get("/")
 def home():
     return {
@@ -240,10 +212,6 @@ def home():
         "status": "online"
     }
 
-
-# =========================================================
-# REGISTER STUDENT
-# =========================================================
 
 @app.post("/register")
 def register_user(
@@ -297,10 +265,6 @@ def register_user(
     }
 
 
-# =========================================================
-# LOGIN
-# =========================================================
-
 @app.post("/login")
 def login_user(
     request: LoginRequest,
@@ -314,10 +278,6 @@ def login_user(
             status_code=400,
             detail="ID and Password are required."
         )
-
-    # -----------------------------------------------------
-    # MAIN ADMIN
-    # -----------------------------------------------------
 
     if (
         login_id == MAIN_ADMIN_ID
@@ -343,9 +303,6 @@ def login_user(
             "area": None
         }
 
-    # -----------------------------------------------------
-    # NORMAL USERS
-    # -----------------------------------------------------
 
     user = db.query(User).filter(
         User.login_id == login_id
@@ -392,10 +349,6 @@ def login_user(
     }
 
 
-# =========================================================
-# CURRENT USER
-# =========================================================
-
 @app.get("/me")
 def get_me(
     current_user=Depends(get_current_user)
@@ -412,10 +365,6 @@ def get_me(
         "area": current_user.area
     }
 
-
-# =========================================================
-# MAIN ADMIN - ADD ADMIN / STAFF
-# =========================================================
 
 @app.post("/main-admin/add-user")
 def add_user(
@@ -482,10 +431,6 @@ def add_user(
     }
 
 
-# =========================================================
-# STAFF LIST
-# =========================================================
-
 @app.get("/staff")
 def get_staff(
     current_user=Depends(get_current_user),
@@ -515,9 +460,6 @@ def get_staff(
     ]
 
 
-# =========================================================
-# CREATE CLEANING TASK
-# =========================================================
 
 @app.post("/cleaning-tasks")
 def create_cleaning_task(
@@ -570,10 +512,7 @@ def create_cleaning_task(
         "status": task.status
     }
 
-
-# =========================================================
-# STAFF TASKS
-# =========================================================
+==
 
 @app.get("/cleaning-tasks/staff/{staff_id}")
 def get_staff_task(
@@ -626,10 +565,6 @@ def get_staff_task(
     }
 
 
-# =========================================================
-# CREATE REPORT
-# =========================================================
-
 @app.post("/reports")
 def create_report(
     request: ReportRequest,
@@ -675,10 +610,6 @@ def create_report(
     }
 
 
-# =========================================================
-# GET REPORTS
-# =========================================================
-
 @app.get("/reports")
 def get_reports(
     current_user=Depends(get_current_user),
@@ -692,7 +623,6 @@ def get_reports(
 
     reports_query = db.query(Report)
 
-    # Student sees only own reports
     if role == "student":
         student_id = (
             current_user["id"]
@@ -704,7 +634,6 @@ def get_reports(
             Report.student_id == student_id
         )
 
-    # Admin can see reports
     elif role not in ["main_admin", "admin", "staff"]:
         raise HTTPException(
             status_code=403,
@@ -731,10 +660,6 @@ def get_reports(
         for report in reports
     ]
 
-
-# =========================================================
-# ADMIN STATS
-# =========================================================
 
 @app.get("/admin/stats")
 def get_admin_stats(
@@ -774,10 +699,6 @@ def get_admin_stats(
     }
 
 
-# =========================================================
-# STUDENT LEADERBOARD
-# =========================================================
-
 @app.get("/students/leaderboard")
 def get_student_leaderboard(
     current_user=Depends(get_current_user),
@@ -798,3 +719,111 @@ def get_student_leaderboard(
         }
         for student in students
     ]
+@app.get("/main-admin/overview")
+def get_main_admin_overview(
+    current_user=Depends(require_main_admin),
+    db: Session = Depends(get_db)
+):
+    students = db.query(User).filter(
+        User.role == "student"
+    ).order_by(User.id.desc()).all()
+
+    admins = db.query(User).filter(
+        User.role == "admin"
+    ).order_by(User.id.desc()).all()
+
+    staff_members = db.query(User).filter(
+        User.role == "staff"
+    ).order_by(User.id.desc()).all()
+
+    total_reports = db.query(Report).count()
+
+    return {
+        "counts": {
+            "students": len(students),
+            "admins": len(admins),
+            "staff": len(staff_members),
+            "reports": total_reports
+        },
+
+        "students": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "login_id": user.login_id,
+                "gr_number": user.gr_number,
+                "role": user.role,
+                "area": user.area
+            }
+            for user in students
+        ],
+
+        "admins": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "login_id": user.login_id,
+                "role": user.role,
+                "area": user.area
+            }
+            for user in admins
+        ],
+
+        "staff": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "login_id": user.login_id,
+                "role": user.role,
+                "area": user.area
+            }
+            for user in staff_members
+        ]
+    }
+
+
+@app.post("/main-admin/users/{user_id}/reset-password")
+def reset_user_password(
+    user_id: int,
+    request: ResetPasswordRequest,
+    current_user=Depends(require_main_admin),
+    db: Session = Depends(get_db)
+):
+    new_password = request.new_password
+
+    if not new_password:
+        raise HTTPException(
+            status_code=400,
+            detail="New password is required."
+        )
+
+    if len(new_password) < 6:
+        raise HTTPException(
+            status_code=400,
+            detail="Password must contain at least 6 characters."
+        )
+
+    user = db.query(User).filter(
+        User.id == user_id
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found."
+        )
+
+    if user.role not in ["student", "admin", "staff"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Password reset is not available for this account."
+        )
+
+    user.password = password_hash.hash(new_password)
+
+    db.commit()
+
+    return {
+        "message": "Password reset successfully",
+        "user_id": user.id
+    }
