@@ -4,16 +4,15 @@
  * so the app never crashes with "Failed to fetch" on Vercel or when the backend is offline.
  */
 
-const DEFAULT_API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:8001'
-    : 'https://ic-clean-campus.onrender.com');
-
 export function getApiBaseUrl() {
-  if (typeof window === 'undefined') return DEFAULT_API_BASE;
-  return localStorage.getItem('custom_api_url') || DEFAULT_API_BASE;
+  if (typeof window === 'undefined') return '';
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  if (localStorage.getItem('custom_api_url')) return localStorage.getItem('custom_api_url');
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:8001';
+  }
+  // In cloud deployment (e.g. Vercel), if no external API URL is specified, run directly in offline/demo mode
+  return '';
 }
 
 export function getAuthToken() {
@@ -149,6 +148,12 @@ async function request(endpoint, options = {}) {
   const baseUrl = getApiBaseUrl();
   const token = getAuthToken();
 
+  // If no backend API URL is configured (e.g. running on Vercel preview/production without custom backend),
+  // immediately use the client-side store without hanging or failing with network errors.
+  if (!baseUrl) {
+    return handleOfflineFallback(endpoint, options);
+  }
+
   const headers = {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -179,11 +184,11 @@ async function request(endpoint, options = {}) {
 
     return data;
   } catch (err) {
-    // If it was an explicit HTTP error from backend (like wrong password 401), rethrow it
-    if (err.status && err.status !== 502 && err.status !== 503) {
+    // If it was an explicit client HTTP error (like wrong password 401 or conflict 409), rethrow it
+    if (err.status && err.status >= 400 && err.status < 500) {
       throw err;
     }
-    // Otherwise it was a network error (backend down / offline / Vercel without cloud API)
+    // Otherwise it was a network error (backend down / offline / CORS / 500)
     console.info(`[Offline Fallback Active] Backend unavailable at ${baseUrl}, handling locally: ${endpoint}`);
     return handleOfflineFallback(endpoint, options);
   }
