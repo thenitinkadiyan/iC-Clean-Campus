@@ -117,11 +117,45 @@ export default function LoginPage() {
             </div>
           </div>
 
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '16px',
+              fontSize: '0.85rem',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setLoginId('2707');
+                setPassword('Nitin@2007');
+              }}
+              style={{
+                background: '#ecfdf5',
+                color: '#059669',
+                border: '1px solid #a7f3d0',
+                borderRadius: '8px',
+                padding: '6px 12px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontSize: '0.82rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              👑 Fill Admin (2707)
+            </button>
+            <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Default: Nitin@2007</span>
+          </div>
+
           <button
             type="submit"
             className="btn btn-primary btn-full"
             disabled={isLoading}
-            style={{ marginTop: '10px', height: '48px', fontSize: '1rem' }}
+            style={{ marginTop: '4px', height: '48px', fontSize: '1rem' }}
           >
             {isLoading ? (
               <span>Authenticating...</span>
