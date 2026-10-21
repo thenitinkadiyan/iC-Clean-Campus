@@ -5,9 +5,10 @@
 
 // Defaults to local backend port 8001, or fallback to cloud URL if specified
 const DEFAULT_API_BASE =
-  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  import.meta.env.VITE_API_URL ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:8001'
-    : 'https://ic-clean-campus.onrender.com';
+    : 'https://ic-clean-campus.onrender.com');
 
 export function getApiBaseUrl() {
   return localStorage.getItem('custom_api_url') || DEFAULT_API_BASE;

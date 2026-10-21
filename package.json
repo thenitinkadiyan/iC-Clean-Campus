@@ -1,0 +1,11 @@
+{
+  "name": "ic-clean-campus",
+  "version": "1.0.0",
+  "private": true,
+  "description": "iC Clean Campus — Smart Clean Sustainable Web Platform",
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix frontend run dev"
+  }
+}
